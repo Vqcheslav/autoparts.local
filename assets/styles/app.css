@@ -3,3 +3,7 @@
 body {
     background-color: gray;
 }
+
+.dropdown-menu[data-bs-popper] {
+    margin-top: 0;
+}
