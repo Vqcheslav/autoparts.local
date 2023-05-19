@@ -15,10 +15,8 @@ use Symfony\Component\Uid\Uuid;
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
-    #[ORM\Column(type: UuidType::NAME, unique: true)]
-    #[ORM\GeneratedValue(strategy: 'CUSTOM')]
-    #[ORM\CustomIdGenerator(class: 'doctrine.uuid_generator')]
-    private ?Uuid $userId = null;
+    #[ORM\Column(type: 'guid', unique: true)]
+    private ?string $userId = null;
 
     #[ORM\Column(length: 180, unique: true)]
     private ?string $email = null;
@@ -37,10 +35,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function __construct()
     {
+        $this->userId = uuid_create();
         $this->orders = new ArrayCollection();
     }
 
-    public function getUserId(): ?Uuid
+    public function getUserId(): ?string
     {
         return $this->userId;
     }

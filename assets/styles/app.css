@@ -1,9 +1,17 @@
 @import "~bootstrap/dist/css/bootstrap.css";
 
 body {
-    background-color: gray;
+    background-color: #f7f7f7;
+}
+
+.navbar {
+    box-shadow: 0 5px 20px 0 #c5c5c5;
 }
 
 .dropdown-menu[data-bs-popper] {
     margin-top: 0;
+}
+
+.container {
+    max-width: 580px;
 }

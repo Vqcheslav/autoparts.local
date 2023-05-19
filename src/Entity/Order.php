@@ -13,10 +13,8 @@ use Symfony\Component\Uid\Uuid;
 class Order
 {
     #[ORM\Id]
-    #[ORM\Column(type: UuidType::NAME, unique: true)]
-    #[ORM\GeneratedValue(strategy: 'CUSTOM')]
-    #[ORM\CustomIdGenerator(class: 'doctrine.uuid_generator')]
-    private ?Uuid $orderId = null;
+    #[ORM\Column(type: 'guid', unique: true)]
+    private ?string $orderId = null;
 
     #[ORM\ManyToOne(inversedBy: 'orders')]
     #[ORM\JoinColumn(referencedColumnName: 'user_id', nullable: false)]
@@ -32,7 +30,12 @@ class Order
     #[ORM\Column(length: 255)]
     private ?string $status = null;
 
-    public function getOrderId(): ?Uuid
+    public function __construct()
+    {
+        $this->orderId = uuid_create();
+    }
+
+    public function getOrderId(): ?string
     {
         return $this->orderId;
     }

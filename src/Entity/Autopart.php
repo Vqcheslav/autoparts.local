@@ -6,17 +6,14 @@ use App\Repository\AutopartRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Bridge\Doctrine\Types\UuidType;
 use Symfony\Component\Uid\Uuid;
 
 #[ORM\Entity(repositoryClass: AutopartRepository::class)]
 class Autopart
 {
     #[ORM\Id]
-    #[ORM\Column(type: UuidType::NAME, unique: true)]
-    #[ORM\GeneratedValue(strategy: 'CUSTOM')]
-    #[ORM\CustomIdGenerator(class: 'doctrine.uuid_generator')]
-    private ?Uuid $autopartId = null;
+    #[ORM\Column(type: 'guid', unique: true)]
+    private ?string $autopartId = null;
 
     #[ORM\Column(length: 255)]
     private ?string $title = null;
@@ -29,10 +26,11 @@ class Autopart
 
     public function __construct()
     {
+        $this->autopartId = uuid_create();
         $this->orders = new ArrayCollection();
     }
 
-    public function getAutopartId(): ?Uuid
+    public function getAutopartId(): ?string
     {
         return $this->autopartId;
     }
