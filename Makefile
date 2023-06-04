@@ -1,7 +1,7 @@
 arg=$(filter-out $@,$(MAKECMDGOALS))
 start:
 	sudo service php8.2-fpm start
-	docker compose up $(arg)
+	docker compose up -d
 	yarn watch
 stop:
 	docker compose stop

@@ -1,0 +1,34 @@
+<nav class="navbar navbar-expand-lg bg-light sticky-top">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="{{ path('homepage') }}">
+            <img
+                class="d-inline-block align-text-top me-3"
+                src="{{ asset('favicon.svg') }}"
+                alt="Logo"
+                width="30"
+                height="30"
+            >
+            Автозапчасти
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+            data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+            aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="{{ path('admin') }}">Админ-панель</a>
+                </li>
+            </ul>
+            <div class="ms-auto d-flex">
+                <img
+                    src="{{ asset('img/components/filter.svg') }}"
+                    alt="Filters"
+                    width="30"
+                    height="30"
+                >
+            </div>
+        </div>
+    </div>
+</nav>

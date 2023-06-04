@@ -14,7 +14,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class DashboardController extends AbstractDashboardController
 {
-    #[Route('/admin/{_locale}', name: 'admin')]
+    #[Route('/admin', name: 'admin')]
     public function index(): Response
     {
 //        return parent::index();
@@ -40,12 +40,13 @@ class DashboardController extends AbstractDashboardController
     public function configureDashboard(): Dashboard
     {
         return Dashboard::new()
-            ->setTitle('Autoparts Local');
+            ->setTitle('Autoparts Local')
+            ->setFaviconPath('/favicon.svg');
     }
 
     public function configureMenuItems(): iterable
     {
-        yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
+        yield MenuItem::linktoRoute('Back to the website', 'fas fa-home', 'homepage');
         yield MenuItem::linkToCrud('Autoparts', 'fas fa-car', Autopart::class);
         yield MenuItem::linkToCrud('Users', 'fas fa-user', User::class);
         yield MenuItem::linkToCrud('Orders', 'fas fa-list', Order::class);

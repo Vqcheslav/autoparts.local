@@ -1,17 +1,69 @@
 @import "~bootstrap/dist/css/bootstrap.css";
 
+:root {
+    --body-bg: #f7f7f7;
+}
+
 body {
-    background-color: #f7f7f7;
+    background-color: var(--body-bg);
 }
 
 .navbar {
     box-shadow: 0 5px 20px 0 #c5c5c5;
 }
 
+.navbar .container-fluid {
+    padding-left: 31px;
+    padding-right: 31px;
+}
+
 .dropdown-menu[data-bs-popper] {
     margin-top: 0;
 }
 
-.container {
+.main-container {
     max-width: 580px;
+    margin: 0 auto;
+    box-shadow: 0 0 10px rgba(147, 147, 147, 0.25);
+}
+
+.content {
+    min-height: 100vh;
+}
+
+.autoparts-div {
+    padding: 20px;
+    /*box-shadow: -5px 0 10px rgba(147, 147, 147, 0.25);*/
+}
+
+.card .row {
+    align-items: center;
+}
+
+.menu-div {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    justify-content: space-between;
+    justify-items: center;
+    align-items: center;
+    padding: 5px 0;
+    background-color: var(--body-bg);
+    box-shadow: 0 -5px 10px rgba(147, 147, 147, 0.25);
+}
+
+.menu-button-div {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    background-color: #ffffff;
+    display: grid;
+    justify-items: center;
+    align-items: center;
+    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+}
+
+.menu-button-div:hover {
+    background-color: #D9D9D9;
 }
