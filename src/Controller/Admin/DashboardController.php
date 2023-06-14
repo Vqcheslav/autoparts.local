@@ -3,8 +3,10 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Autopart;
+use App\Entity\Car;
 use App\Entity\Order;
 use App\Entity\User;
+use App\Entity\Warehouse;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
@@ -47,7 +49,9 @@ class DashboardController extends AbstractDashboardController
     public function configureMenuItems(): iterable
     {
         yield MenuItem::linktoRoute('Back to the website', 'fas fa-home', 'homepage');
-        yield MenuItem::linkToCrud('Autoparts', 'fas fa-car', Autopart::class);
+        yield MenuItem::linkToCrud('Autoparts', 'fas fa-table', Autopart::class);
+        yield MenuItem::linkToCrud('Cars', 'fas fa-car', Car::class);
+        yield MenuItem::linkToCrud('Warehouses', 'fas fa-warehouse', Warehouse::class);
         yield MenuItem::linkToCrud('Users', 'fas fa-user', User::class);
         yield MenuItem::linkToCrud('Orders', 'fas fa-list', Order::class);
     }

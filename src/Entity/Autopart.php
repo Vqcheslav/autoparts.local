@@ -6,7 +6,6 @@ use App\Repository\AutopartRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Uid\Uuid;
 
 #[ORM\Entity(repositoryClass: AutopartRepository::class)]
 class Autopart
@@ -23,6 +22,14 @@ class Autopart
 
     #[ORM\OneToMany(mappedBy: 'autopart', targetEntity: Order::class, orphanRemoval: true)]
     private Collection $orders;
+
+    #[ORM\ManyToOne(inversedBy: 'autoparts')]
+    #[ORM\JoinColumn(referencedColumnName: 'car_id', nullable: false)]
+    private ?Car $car = null;
+
+    #[ORM\ManyToOne(inversedBy: 'autoparts')]
+    #[ORM\JoinColumn(referencedColumnName: 'warehouse_id', nullable: false)]
+    private ?Warehouse $warehouse = null;
 
     public function __construct()
     {
@@ -92,5 +99,29 @@ class Autopart
     public function __toString(): string
     {
         return $this->title;
+    }
+
+    public function getCar(): ?Car
+    {
+        return $this->car;
+    }
+
+    public function setCar(?Car $car): self
+    {
+        $this->car = $car;
+
+        return $this;
+    }
+
+    public function getWarehouse(): ?Warehouse
+    {
+        return $this->warehouse;
+    }
+
+    public function setWarehouse(?Warehouse $warehouse): self
+    {
+        $this->warehouse = $warehouse;
+
+        return $this;
     }
 }
