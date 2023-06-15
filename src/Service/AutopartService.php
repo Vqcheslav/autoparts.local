@@ -7,13 +7,13 @@ use App\Repository\AutopartRepository;
 class AutopartService
 {
     public function __construct(
-        private AutopartRepository $autopartRepository
+        private readonly AutopartRepository $autopartRepository
     ) {
     }
 
-    public function getLastAutoparts(int $amount = 50)
+    public function getLastAutoparts(int $amount = 50): array
     {
-
+        return $this->autopartRepository->getLast($amount);
     }
 
     public function findAll()

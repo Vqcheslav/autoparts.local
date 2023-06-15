@@ -17,7 +17,7 @@ class MainController extends AbstractController
     #[Route('/', name: 'homepage')]
     public function index(): Response
     {
-        $autoparts = $this->autopartService->findAll();
+        $autoparts = $this->autopartService->getLastAutoparts();
 
         return $this->render('homepage.html.twig', ['autoparts' => $autoparts]);
     }

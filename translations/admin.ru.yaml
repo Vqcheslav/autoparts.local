@@ -1,0 +1,35 @@
+Autopart: Объект Автозапчасть
+Title: Заголовок
+Description: Описание
+Dashboard: Админ-панель
+Autoparts: Автозапчасти
+Users: Пользователи
+User: Объект Пользователь
+Orders: Заказы
+Order: Объект Заказ
+Autopart Id: Id Автозапчасти
+Back to the website: Вернуться на сайт
+Amount: Количество
+Status: Статус
+Cars: Автомобили
+Car: Объект Автомобиль
+Warehouses: Склады
+Warehouse: Объект Склад
+Address: Адрес
+Opening Hours: Часы работы
+Working Days: Дни работы
+Phone Number: Номер телефона
+Manufacturer: Объект Производитель
+Manufacturers: Производители
+manufacturer: Производитель
+Country: Страна
+Model: Модель
+Brand: Бренд
+Generation: Поколение
+Year: Год
+Engine: Двигатель
+Updated At: Обновлен
+Created At: Создан
+Name: Фамилия, имя
+Email: Эл. почта
+Roles: Права доступа

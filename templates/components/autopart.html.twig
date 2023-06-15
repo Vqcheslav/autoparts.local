@@ -2,8 +2,8 @@
     <div class="row g-0">
         <div class="col-md-4">
             <img
+                class="img-fluid rounded-start ms-3"
                 src="{{ asset('img/components/gearshift.svg') }}"
-                class="img-fluid rounded-start"
                 alt="{{ autopart.title }}"
             >
         </div>
@@ -13,10 +13,10 @@
                     {{ autopart.title }}
                 </h5>
                 <p class="card-text">
-                    {{ autopart.car }}
+                    Для {{ autopart.car }}
                 </p>
                 <p class="card-text">
-                    {{ autopart.warehouse }}
+                    Склад: {{ autopart.warehouse }}
                 </p>
                 <p class="card-text">
                     {{ autopart.description|raw }}

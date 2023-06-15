@@ -1,0 +1,64 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Войти в Магазин автозапчастей{% endblock %}
+
+{% block body %}
+    <div class="main">
+        {% include('components/header.html.twig') %}
+        <div class="content main-container">
+            <div class="autoparts-div">
+                <form class="d-grid gap-4" action="" method="POST">
+                    <div>
+                        <label for="email-input" class="form-label">
+                            Email
+                        </label>
+                        <input
+                            id="email-input"
+                            class="form-control"
+                            name="_username"
+                            type="email"
+                            placeholder="Введите ваш 'email@example.com'"
+                            minlength="6"
+                            maxlength="100"
+                            autocomplete="on"
+                            value="{{ email }}"
+                            required
+                        >
+                    </div>
+                    <div>
+                        <label for="password-input" class="form-label">
+                            Пароль
+                        </label>
+                        <input
+                            id="password-input"
+                            class="form-control"
+                            name="_password"
+                            type="password"
+                            placeholder="Введите ваш пароль"
+                            minlength="8"
+                            maxlength="50"
+                            autocomplete="off"
+                            required
+                        >
+                    </div>
+
+                    {% if error %}
+                        <div class="alert alert-danger">
+                            {{ error }}
+                        </div>
+                    {% endif %}
+
+                    <button class="btn btn-primary">
+                        Войти
+                    </button>
+                    <a class="link-primary text-center" href="{{ path('register') }}">
+                        Зарегистрироваться
+                    </a>
+                </form>
+            </div>
+        </div>
+        <div class="main-container sticky-bottom">
+            {% include 'components/menu.html.twig' %}
+        </div>
+    </div>
+{% endblock %}

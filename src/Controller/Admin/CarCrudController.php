@@ -16,7 +16,7 @@ class CarCrudController extends AbstractCrudController
 
     public function configureFields(string $pageName): iterable
     {
-        yield TextField::new('manufacturer');
+        yield TextField::new('manufacturer', 'manufacturer');
         yield TextField::new('brand');
         yield TextField::new('model');
         yield TextField::new('generation');

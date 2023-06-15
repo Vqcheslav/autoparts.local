@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Autopart;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -39,20 +40,20 @@ class AutopartRepository extends ServiceEntityRepository
         }
     }
 
-//    /**
-//     * @return Autopart[] Returns an array of Autopart objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('a')
-//            ->andWhere('a.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('a.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    /**
+     * @return Autopart[] Returns an array of Autopart objects
+     */
+    public function getLast(int $amount): array
+    {
+        return $this->createQueryBuilder('a')
+            ->select('a', 'c', 'w')
+            ->join('a.car', 'c')
+            ->join('a.warehouse', 'w')
+            ->orderBy('a.createdAt', 'DESC')
+            ->setMaxResults($amount)
+            ->getQuery()
+            ->getResult();
+    }
 
 //    public function findOneBySomeField($value): ?Autopart
 //    {

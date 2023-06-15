@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\AutopartRepository;
+use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -31,9 +32,21 @@ class Autopart
     #[ORM\JoinColumn(referencedColumnName: 'warehouse_id', nullable: false)]
     private ?Warehouse $warehouse = null;
 
+    #[ORM\Column]
+    private ?DateTimeImmutable $updatedAt = null;
+
+    #[ORM\Column]
+    private ?DateTimeImmutable $createdAt = null;
+
+    #[ORM\ManyToOne(inversedBy: 'autoparts')]
+    #[ORM\JoinColumn(referencedColumnName: 'manufacturer_id', nullable: false)]
+    private ?Manufacturer $manufacturer = null;
+
     public function __construct()
     {
         $this->autopartId = uuid_create();
+        $this->setCreatedAt(new DateTimeImmutable());
+        $this->setUpdatedAtNow();
         $this->orders = new ArrayCollection();
     }
 
@@ -49,6 +62,7 @@ class Autopart
 
     public function setTitle(string $title): self
     {
+        $this->setUpdatedAtNow();
         $this->title = $title;
 
         return $this;
@@ -61,6 +75,7 @@ class Autopart
 
     public function setDescription(string $description): self
     {
+        $this->setUpdatedAtNow();
         $this->description = $description;
 
         return $this;
@@ -96,11 +111,6 @@ class Autopart
         return $this;
     }
 
-    public function __toString(): string
-    {
-        return $this->title;
-    }
-
     public function getCar(): ?Car
     {
         return $this->car;
@@ -108,6 +118,7 @@ class Autopart
 
     public function setCar(?Car $car): self
     {
+        $this->setUpdatedAtNow();
         $this->car = $car;
 
         return $this;
@@ -120,7 +131,57 @@ class Autopart
 
     public function setWarehouse(?Warehouse $warehouse): self
     {
+        $this->setUpdatedAtNow();
         $this->warehouse = $warehouse;
+
+        return $this;
+    }
+
+    public function getUpdatedAt(): ?DateTimeImmutable
+    {
+        return $this->updatedAt;
+    }
+
+    public function setUpdatedAt(DateTimeImmutable $updatedAt): self
+    {
+        $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    public function setUpdatedAtNow(): self
+    {
+        $this->setUpdatedAt(new DateTimeImmutable());
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?DateTimeImmutable
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(DateTimeImmutable $createdAt): self
+    {
+        $this->setUpdatedAtNow();
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function __toString(): string
+    {
+        return $this->title;
+    }
+
+    public function getManufacturer(): ?Manufacturer
+    {
+        return $this->manufacturer;
+    }
+
+    public function setManufacturer(?Manufacturer $manufacturer): static
+    {
+        $this->manufacturer = $manufacturer;
 
         return $this;
     }
