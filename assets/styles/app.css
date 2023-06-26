@@ -1,43 +1,20 @@
 @import "~bootstrap/dist/css/bootstrap.css";
 
 :root {
-    --body-bg: #f7f7f7;
-}
-
-body {
-    background-color: var(--body-bg);
+    --bs-body-bg: #f7f7f7;
 }
 
 .navbar {
     box-shadow: 0 5px 20px 0 #c5c5c5;
 }
 
-.navbar .container-fluid {
-    padding-left: 31px;
-    padding-right: 31px;
-}
-
 .dropdown-menu[data-bs-popper] {
     margin-top: 0;
 }
 
-.main-container {
+.container {
     max-width: 580px;
-    margin: 0 auto;
     box-shadow: 0 0 10px rgba(147, 147, 147, 0.25);
-}
-
-.content {
-    min-height: 100vh;
-}
-
-.autoparts-div {
-    padding: 20px;
-    /*box-shadow: -5px 0 10px rgba(147, 147, 147, 0.25);*/
-}
-
-.card .row {
-    align-items: center;
 }
 
 .menu-div {
@@ -47,7 +24,7 @@ body {
     justify-items: center;
     align-items: center;
     padding: 5px 0;
-    background-color: var(--body-bg);
+    background-color: var(--bs-body-bg);
     box-shadow: 0 -5px 10px rgba(147, 147, 147, 0.25);
 }
 
@@ -66,4 +43,84 @@ body {
 
 .menu-button-div:hover {
     background-color: #D9D9D9;
+}
+
+.animation-appear {
+    animation: 0.6s ease-in-out appear;
+}
+
+.animation-disappear {
+    animation: 0.8s ease-in-out disappear;
+}
+
+@-webkit-keyframes appear {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@-o-keyframes appear {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@-moz-keyframes appear {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes appear {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@-webkit-keyframes disappear {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+}
+
+@-o-keyframes disappear {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+}
+
+@-moz-keyframes disappear {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+}
+
+@keyframes disappear {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
 }

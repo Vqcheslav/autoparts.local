@@ -5,16 +5,13 @@ namespace App\Entity;
 use App\Repository\OrderRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Bridge\Doctrine\Types\UuidType;
-use Symfony\Component\Uid\Uuid;
 
 #[ORM\Entity(repositoryClass: OrderRepository::class)]
-#[ORM\Table(name: '`order`')]
-class Order
+class AutopartOrder
 {
     #[ORM\Id]
     #[ORM\Column(type: 'guid', unique: true)]
-    private ?string $orderId = null;
+    private ?string $autopartOrderId = null;
 
     #[ORM\ManyToOne(inversedBy: 'orders')]
     #[ORM\JoinColumn(referencedColumnName: 'user_id', nullable: false)]
@@ -32,12 +29,12 @@ class Order
 
     public function __construct()
     {
-        $this->orderId = uuid_create();
+        $this->autopartOrderId = uuid_create();
     }
 
-    public function getOrderId(): ?string
+    public function getAutopartOrderId(): ?string
     {
-        return $this->orderId;
+        return $this->autopartOrderId;
     }
 
     public function getUser(): ?User

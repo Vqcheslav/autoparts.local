@@ -4,8 +4,9 @@ namespace App\Controller\Admin;
 
 use App\Entity\Autopart;
 use App\Entity\Car;
+use App\Entity\Favorite;
 use App\Entity\Manufacturer;
-use App\Entity\Order;
+use App\Entity\AutopartOrder;
 use App\Entity\User;
 use App\Entity\Warehouse;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
@@ -54,8 +55,9 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Autoparts', 'fas fa-table', Autopart::class);
         yield MenuItem::linkToCrud('Cars', 'fas fa-car', Car::class);
         yield MenuItem::linkToCrud('Warehouses', 'fas fa-warehouse', Warehouse::class);
-        yield MenuItem::linkToCrud('Orders', 'fas fa-list', Order::class);
+        yield MenuItem::linkToCrud('AutopartOrders', 'fas fa-list', AutopartOrder::class);
         yield MenuItem::linkToCrud('Manufacturers', 'fas fa-building', Manufacturer::class);
+        yield MenuItem::linkToCrud('Favorites', 'fas fa-heart', Favorite::class);
 
         if ($this->isGranted('ROLE_ADMIN')) {
             yield MenuItem::linkToCrud('Users', 'fas fa-user', User::class);

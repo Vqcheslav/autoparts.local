@@ -21,7 +21,7 @@ class Autopart
     #[ORM\Column(length: 2000)]
     private ?string $description = null;
 
-    #[ORM\OneToMany(mappedBy: 'autopart', targetEntity: Order::class, orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'autopart', targetEntity: AutopartOrder::class, orphanRemoval: true)]
     private Collection $orders;
 
     #[ORM\ManyToOne(inversedBy: 'autoparts')]
@@ -42,12 +42,20 @@ class Autopart
     #[ORM\JoinColumn(referencedColumnName: 'manufacturer_id', nullable: false)]
     private ?Manufacturer $manufacturer = null;
 
+    #[ORM\OneToMany(mappedBy: 'autopart', targetEntity: Favorite::class, orphanRemoval: true)]
+    private Collection $favorites;
+
+    #[ORM\OneToMany(mappedBy: 'autopart', targetEntity: Cart::class, orphanRemoval: true)]
+    private Collection $carts;
+
     public function __construct()
     {
         $this->autopartId = uuid_create();
         $this->setCreatedAt(new DateTimeImmutable());
         $this->setUpdatedAtNow();
         $this->orders = new ArrayCollection();
+        $this->favorites = new ArrayCollection();
+        $this->carts = new ArrayCollection();
     }
 
     public function getAutopartId(): ?string
@@ -82,14 +90,14 @@ class Autopart
     }
 
     /**
-     * @return Collection<int, Order>
+     * @return Collection<int, AutopartOrder>
      */
     public function getOrders(): Collection
     {
         return $this->orders;
     }
 
-    public function addOrder(Order $order): self
+    public function addOrder(AutopartOrder $order): self
     {
         if (!$this->orders->contains($order)) {
             $this->orders->add($order);
@@ -99,7 +107,7 @@ class Autopart
         return $this;
     }
 
-    public function removeOrder(Order $order): self
+    public function removeOrder(AutopartOrder $order): self
     {
         if ($this->orders->removeElement($order)) {
             // set the owning side to null (unless already changed)
@@ -182,6 +190,66 @@ class Autopart
     public function setManufacturer(?Manufacturer $manufacturer): static
     {
         $this->manufacturer = $manufacturer;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Favorite>
+     */
+    public function getFavorites(): Collection
+    {
+        return $this->favorites;
+    }
+
+    public function addFavorite(Favorite $favorite): static
+    {
+        if (!$this->favorites->contains($favorite)) {
+            $this->favorites->add($favorite);
+            $favorite->setAutopart($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFavorite(Favorite $favorite): static
+    {
+        if ($this->favorites->removeElement($favorite)) {
+            // set the owning side to null (unless already changed)
+            if ($favorite->getAutopart() === $this) {
+                $favorite->setAutopart(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Cart>
+     */
+    public function getCarts(): Collection
+    {
+        return $this->carts;
+    }
+
+    public function addCart(Cart $cart): static
+    {
+        if (!$this->carts->contains($cart)) {
+            $this->carts->add($cart);
+            $cart->setAutopart($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCart(Cart $cart): static
+    {
+        if ($this->carts->removeElement($cart)) {
+            // set the owning side to null (unless already changed)
+            if ($cart->getAutopart() === $this) {
+                $cart->setAutopart(null);
+            }
+        }
 
         return $this;
     }

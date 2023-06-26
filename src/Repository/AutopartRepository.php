@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Autopart;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\Persistence\ManagerRegistry;
@@ -51,6 +52,26 @@ class AutopartRepository extends ServiceEntityRepository
             ->join('a.warehouse', 'w')
             ->orderBy('a.createdAt', 'DESC')
             ->setMaxResults($amount)
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function getFavoritesByUser(User $user)
+    {
+        return $this->createQueryBuilder('a')
+            ->join('a.favourites', 'f')
+            ->andWhere('f.user = :user')
+            ->setParameter('user', $user)
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function getInCartByUser(User $user)
+    {
+        return $this->createQueryBuilder('a')
+            ->join('a.carts', 'c')
+            ->andWhere('c.user = :user')
+            ->setParameter('user', $user)
             ->getQuery()
             ->getResult();
     }

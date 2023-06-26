@@ -5,8 +5,8 @@ Dashboard: Админ-панель
 Autoparts: Автозапчасти
 Users: Пользователи
 User: Объект Пользователь
-Orders: Заказы
-Order: Объект Заказ
+AutopartOrders: Заказы
+AutopartOrder: Объект Заказ
 Autopart Id: Id Автозапчасти
 Back to the website: Вернуться на сайт
 Amount: Количество
@@ -33,3 +33,6 @@ Created At: Создан
 Name: Фамилия, имя
 Email: Эл. почта
 Roles: Права доступа
+Favorites: Избранное/корзина
+Favorite: Объект Избранное/корзина
+Is In Cart: В корзине?
