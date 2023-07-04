@@ -8,4 +8,8 @@
 // any CSS you import will output into a single css file (app.css in this case)
 import './styles/app.css';
 
+require('bootstrap');
+
+import './js/classes.js';
 import './js/homepage.js';
+import './js/register.js';

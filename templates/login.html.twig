@@ -5,6 +5,9 @@
 {% block content %}
     <div class="container min-vh-100 py-3">
         <div class="autoparts-div">
+            <h1 class="title-1 mb-3">
+                Вход
+            </h1>
             <form class="d-grid gap-4" action="" method="POST">
                 <div>
                     <label for="email-input" class="form-label">
@@ -16,9 +19,10 @@
                         name="_username"
                         type="email"
                         placeholder="Введите ваш 'email@example.com'"
+                        title="Введите ваш 'email@example.com'"
                         minlength="6"
                         maxlength="100"
-                        autocomplete="on"
+                        autocomplete="email"
                         value="{{ email }}"
                         required
                     >
@@ -33,9 +37,10 @@
                         name="_password"
                         type="password"
                         placeholder="Введите ваш пароль"
+                        title="Введите ваш пароль"
                         minlength="8"
                         maxlength="50"
-                        autocomplete="off"
+                        autocomplete="current-password"
                         required
                     >
                 </div>

@@ -452,8 +452,8 @@ class Toast
             return false;
         }
 
-        title = getToastMessage(title);
-        message = getToastMessage(message) + ' ' + additionalInfo;
+        // title = getToastMessage(title);
+        message = message + ' ' + additionalInfo;
 
         Toast.getGeneralDiv().classList.remove('d-none-important');
         Toast.getGeneralDiv().dataset.time = (new Date()).getTime().toString();

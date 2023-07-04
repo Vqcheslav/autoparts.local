@@ -11,11 +11,6 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class UserController extends AbstractController
 {
-    public function __construct(
-        private UserService $userService
-    ) {
-    }
-
     #[Route('/login', name: 'login', methods: ['GET', 'HEAD', 'POST'])]
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
@@ -28,8 +23,8 @@ class UserController extends AbstractController
         ]);
     }
 
-    #[Route('/register', name: 'register', methods: ['GET', 'HEAD', 'POST'])]
-    public function register(): Response
+    #[Route('/register', name: 'register', methods: ['GET', 'HEAD'])]
+    public function showRegister(): Response
     {
         return $this->render('register.html.twig');
     }

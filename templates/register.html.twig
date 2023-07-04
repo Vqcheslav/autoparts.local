@@ -5,7 +5,10 @@
 {% block content %}
     <div class="container min-vh-100 py-3">
         <div class="autoparts-div">
-            <form class="d-grid gap-4" action="" method="POST">
+            <h1 class="title-1 mb-3">
+                Регистрация
+            </h1>
+            <form id="register-form" class="d-grid gap-4" action="" method="POST">
                 <div>
                     <label for="name-input" class="form-label">
                         Фамилия, имя
@@ -13,11 +16,13 @@
                     <input
                         id="name-input"
                         class="form-control"
-                        type="email"
+                        name="name"
+                        type="text"
                         placeholder="Введите вашу фамилию и имя"
+                        title="Введите вашу фамилию и имя"
                         minlength="6"
                         maxlength="100"
-                        autocomplete="on"
+                        autocomplete="name"
                         required
                     >
                 </div>
@@ -28,11 +33,13 @@
                     <input
                         id="email-input"
                         class="form-control"
+                        name="email"
                         type="email"
                         placeholder="Введите ваш 'email@example.com'"
+                        title="Введите ваш 'email@example.com'"
                         minlength="6"
                         maxlength="100"
-                        autocomplete="on"
+                        autocomplete="email"
                         required
                     >
                 </div>
@@ -43,11 +50,13 @@
                     <input
                         id="password-input"
                         class="form-control"
+                        name="password"
                         type="password"
                         placeholder="Введите ваш пароль"
+                        title="Введите ваш пароль"
                         minlength="8"
                         maxlength="50"
-                        autocomplete="off"
+                        autocomplete="new-password"
                         required
                     >
                 </div>
