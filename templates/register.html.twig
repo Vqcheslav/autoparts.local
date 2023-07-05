@@ -4,72 +4,102 @@
 
 {% block content %}
     <div class="container min-vh-100 py-3">
-        <div class="autoparts-div">
-            <h1 class="title-1 mb-3">
-                Регистрация
-            </h1>
-            <form id="register-form" class="d-grid gap-4" action="" method="POST">
-                <div>
-                    <label for="name-input" class="form-label">
-                        Фамилия, имя
-                    </label>
-                    <input
-                        id="name-input"
-                        class="form-control"
-                        name="name"
-                        type="text"
-                        placeholder="Введите вашу фамилию и имя"
-                        title="Введите вашу фамилию и имя"
-                        minlength="5"
-                        maxlength="100"
-                        autocomplete="name"
-                        required
-                    >
-                </div>
-                <div>
-                    <label for="email-input" class="form-label">
-                        Email
-                    </label>
-                    <input
-                        id="email-input"
-                        class="form-control"
-                        name="email"
-                        type="email"
-                        placeholder="Введите ваш 'email@example.com'"
-                        title="Введите ваш 'email@example.com'"
-                        minlength="6"
-                        maxlength="100"
-                        autocomplete="email"
-                        required
-                    >
-                </div>
-                <div>
-                    <label for="password-input" class="form-label">
-                        Пароль
-                    </label>
-                    <input
-                        id="password-input"
-                        class="form-control"
-                        name="password"
-                        type="password"
-                        placeholder="Введите ваш пароль"
-                        title="Введите ваш пароль"
-                        minlength="8"
-                        maxlength="50"
-                        autocomplete="new-password"
-                        required
-                    >
-                </div>
+        <h1 class="mb-3">
+            Регистрация
+        </h1>
+        <form id="register-form" class="d-grid gap-4" action="" method="POST">
+            <div>
+                <label for="name-input" class="form-label">
+                    Фамилия, имя
+                </label>
+                <input
+                    id="name-input"
+                    class="form-control"
+                    name="name"
+                    type="text"
+                    placeholder="Введите вашу фамилию и имя"
+                    title="Введите вашу фамилию и имя"
+                    minlength="5"
+                    maxlength="100"
+                    autocomplete="name"
+                    required
+                >
+            </div>
+            <div>
+                <label for="email-input" class="form-label">
+                    Email
+                </label>
+                <input
+                    id="email-input"
+                    class="form-control"
+                    name="email"
+                    type="email"
+                    placeholder="Введите ваш 'email@example.com'"
+                    title="Введите ваш 'email@example.com'"
+                    minlength="6"
+                    maxlength="100"
+                    autocomplete="email"
+                    required
+                >
+            </div>
+            <div>
+                <label for="password-input" class="form-label">
+                    Пароль
+                </label>
+                <input
+                    id="password-input"
+                    class="form-control"
+                    name="password"
+                    type="password"
+                    placeholder="Введите ваш пароль"
+                    title="Введите ваш пароль"
+                    minlength="8"
+                    maxlength="50"
+                    autocomplete="new-password"
+                    required
+                >
+            </div>
 
-                <div id="register-msg-div" class="alert d-none"></div>
+            <div id="register-msg-div" class="alert d-none"></div>
 
-                <button class="btn btn-primary">
-                    Зарегистрироваться
-                </button>
-                <a class="link-primary text-center" href="{{ path('login') }}">
-                    Войти
-                </a>
-            </form>
-        </div>
+            <button class="btn btn-primary">
+                Зарегистрироваться
+            </button>
+            <a class="link-primary text-center" href="{{ path('login') }}">
+                Войти
+            </a>
+        </form>
     </div>
 {% endblock %}
+
+{% block 'js' %}
+<script>
+    document.getElementById('register-form').addEventListener('submit', async function (e) {
+        e.preventDefault();
+        let errorMsgDiv = document.getElementById('register-msg-div');
+
+        errorMsgDiv.classList.add('d-none');
+
+        let formData = new FormData(this);
+        let response = await fetch('/api/register', {
+            method: 'POST',
+            body: formData,
+            headers: {'Accept': 'application/json'}
+        });
+        let resultJson = await response.json();
+
+        console.log(resultJson);
+
+        if (resultJson.status !== 201) {
+            errorMsgDiv.classList.remove('alert-success');
+            errorMsgDiv.classList.add('alert-danger');
+        } else {
+            errorMsgDiv.classList.remove('alert-danger');
+            errorMsgDiv.classList.add('alert-success');
+        }
+
+        errorMsgDiv.classList.remove('d-none');
+        errorMsgDiv.textContent = resultJson.detail;
+    });
+</script>
+{%  endblock %}

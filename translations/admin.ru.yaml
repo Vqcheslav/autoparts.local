@@ -33,6 +33,7 @@ Created At: Создан
 Name: Фамилия, имя
 Email: Эл. почта
 Roles: Права доступа
-Favorites: Избранное/корзина
-Favorite: Объект Избранное/корзина
-Is In Cart: В корзине?
+Favorites: Избранное
+Favorite: Объект Избранное
+Cart: Объект Корзина
+Carts: Корзины

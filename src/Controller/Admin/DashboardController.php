@@ -4,6 +4,7 @@ namespace App\Controller\Admin;
 
 use App\Entity\Autopart;
 use App\Entity\Car;
+use App\Entity\Cart;
 use App\Entity\Favorite;
 use App\Entity\Manufacturer;
 use App\Entity\AutopartOrder;
@@ -51,16 +52,17 @@ class DashboardController extends AbstractDashboardController
 
     public function configureMenuItems(): iterable
     {
-        yield MenuItem::linktoRoute('Back to the website', 'fas fa-home', 'homepage');
-        yield MenuItem::linkToCrud('Autoparts', 'fas fa-table', Autopart::class);
-        yield MenuItem::linkToCrud('Cars', 'fas fa-car', Car::class);
-        yield MenuItem::linkToCrud('Warehouses', 'fas fa-warehouse', Warehouse::class);
-        yield MenuItem::linkToCrud('AutopartOrders', 'fas fa-list', AutopartOrder::class);
-        yield MenuItem::linkToCrud('Manufacturers', 'fas fa-building', Manufacturer::class);
-        yield MenuItem::linkToCrud('Favorites', 'fas fa-heart', Favorite::class);
+        yield MenuItem::linktoRoute('Back to the website', 'fa-solid fa-home', 'homepage');
+        yield MenuItem::linkToCrud('Autoparts', 'fa-solid fa-truck-ramp-box', Autopart::class);
+        yield MenuItem::linkToCrud('Cars', 'fa-solid fa-car', Car::class);
+        yield MenuItem::linkToCrud('Warehouses', 'fa-solid fa-warehouse', Warehouse::class);
+        yield MenuItem::linkToCrud('AutopartOrders', 'fa-solid fa-list', AutopartOrder::class);
+        yield MenuItem::linkToCrud('Manufacturers', 'fa-solid fa-industry', Manufacturer::class);
+        yield MenuItem::linkToCrud('Favorites', 'fa-solid fa-heart', Favorite::class);
+        yield MenuItem::linkToCrud('Carts', 'fa-solid fa-cart-shopping', Cart::class);
 
         if ($this->isGranted('ROLE_ADMIN')) {
-            yield MenuItem::linkToCrud('Users', 'fas fa-user', User::class);
+            yield MenuItem::linkToCrud('Users', 'fa-solid fa-user', User::class);
         }
     }
 }

@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-lg bg-light sticky-top">
     <div class="container-fluid px-4">
-        <a class="navbar-brand" href="{{ path('homepage') }}">
+        <a class="navbar-brand align-items-center d-flex pe-3 border-end" href="{{ path('homepage') }}">
             <img
                 class="d-inline-block align-text-top me-3"
                 src="{{ asset('favicon.svg') }}"
@@ -17,10 +17,10 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="{{ path('admin') }}">Админ-панель</a>
-                </li>
                 {% if is_granted('ROLE_USER') %}
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="{{ path('admin') }}">Админ-панель</a>
+                    </li>
                     <li class="nav-item">
                         <a class="nav-link active" aria-current="page" href="{{ path('logout') }}">Выйти</a>
                     </li>

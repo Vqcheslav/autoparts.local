@@ -4,6 +4,9 @@
 
 {% block content %}
     <div class="container min-vh-100 py-3">
+        <h1 class="mb-4">
+            Главная: автозапчасти
+        </h1>
         <div class="d-grid gap-3">
             {% for autopart in autoparts %}
                 {% include('components/autopart.html.twig') %}

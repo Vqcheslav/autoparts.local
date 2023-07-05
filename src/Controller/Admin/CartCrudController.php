@@ -2,15 +2,15 @@
 
 namespace App\Controller\Admin;
 
-use App\Entity\Favorite;
+use App\Entity\Cart;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 
-class FavoriteCrudController extends AbstractCrudController
+class CartCrudController extends AbstractCrudController
 {
     public static function getEntityFqcn(): string
     {
-        return Favorite::class;
+        return Cart::class;
     }
 
     public function configureFields(string $pageName): iterable
