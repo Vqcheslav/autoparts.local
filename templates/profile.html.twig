@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Регистрация в Магазине автозапчастей{% endblock %}
+
+{% block content %}
+<div class="container min-vh-100 py-3">
+    <div class="autoparts-div">
+        <h1 class="title-1 mb-4">
+            Профиль
+        </h1>
+        <div class="d-grid gap-2">
+            <p class="fw-bold">ID пользователя:</p>
+            <p>{{ app.user.userId }}</p>
+            <p class="fw-bold">Имя пользователя:</p>
+            <p>{{ app.user.name }}</p>
+            <p class="fw-bold">Email пользователя:</p>
+            <p>{{ app.user.email }}</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

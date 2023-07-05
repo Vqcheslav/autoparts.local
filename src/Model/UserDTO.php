@@ -7,15 +7,14 @@ use Symfony\Component\Validator\Constraints as Assert;
 class UserDTO
 {
     public function __construct(
-        #[Assert\NotBlank]
+        #[Assert\Length(min: 5, max: 100)]
         public string $name,
 
         #[Assert\Email]
         public string $email,
 
-        #[Assert\PasswordStrength]
+        #[Assert\Length(min: 8, max: 50)]
         public string $password,
-    )
-    {
+    ) {
     }
 }

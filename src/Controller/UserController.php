@@ -29,6 +29,12 @@ class UserController extends AbstractController
         return $this->render('register.html.twig');
     }
 
+    #[Route('/profile', name: 'profile', methods: ['GET', 'HEAD'])]
+    public function showProfile(): Response
+    {
+        return $this->render('profile.html.twig');
+    }
+
     #[Route('/logout', name: 'logout', methods: ['GET', 'HEAD', 'POST'])]
     public function logout(Security $security): Response
     {

@@ -26,7 +26,15 @@
             loading="lazy"
         >
     </div>
-    <a class="menu-button-div" href="{{ path('login') }}">
+    <a
+        class="menu-button-div"
+
+        {% if is_granted('ROLE_USER') %}
+            href="{{ path('profile') }}"
+        {% else %}
+            href="{{ path('login') }}"
+        {% endif %}
+    >
         <img
             src="{{ asset('img/components/user.svg') }}"
             alt="Profile"
