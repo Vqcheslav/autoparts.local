@@ -8,8 +8,9 @@
 // any CSS you import will output into a single css file (app.css in this case)
 import './styles/app.css';
 
+import 'bootstrap';
 require('bootstrap');
 
 import './js/classes.js';
-import './js/homepage.js';
+import './js/all.js';
 import './js/register.js';

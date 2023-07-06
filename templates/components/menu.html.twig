@@ -8,7 +8,7 @@
             loading="lazy"
         >
     </a>
-    <div class="menu-button-div">
+    <a class="menu-button-div" href="{{ path('favorite') }}">
         <img
             src="{{ asset('img/components/heart.svg') }}"
             alt="Favourite"
@@ -16,8 +16,8 @@
             height="40"
             loading="lazy"
         >
-    </div>
-    <div class="menu-button-div">
+    </a>
+    <a class="menu-button-div" href="{{ path('cart') }}">
         <img
             src="{{ asset('img/components/cart.svg') }}"
             alt="Cart"
@@ -25,16 +25,8 @@
             height="40"
             loading="lazy"
         >
-    </div>
-    <a
-        class="menu-button-div"
-
-        {% if is_granted('ROLE_USER') %}
-            href="{{ path('profile') }}"
-        {% else %}
-            href="{{ path('login') }}"
-        {% endif %}
-    >
+    </a>
+    <a class="menu-button-div" href="{{ path('profile') }}">
         <img
             src="{{ asset('img/components/user.svg') }}"
             alt="Profile"

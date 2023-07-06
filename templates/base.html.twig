@@ -21,11 +21,14 @@
 
 {% block content %}{% endblock %}
 
-
 {% block footer %}
     <div class="container p-0 sticky-bottom">
         {% include 'components/menu.html.twig' %}
     </div>
+{% endblock %}
+
+{% block toast %}
+    {% include('components/toast.html.twig') %}
 {% endblock %}
 
 {% block javascripts %}

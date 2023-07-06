@@ -1,12 +1,15 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Главная - Магазин автозапчастей{% endblock %}
+{% block title %}Избранное - Магазин автозапчастей{% endblock %}
 
 {% block content %}
     <div class="container min-vh-100 py-3">
+        <h1 class="mb-4">
+            Избранное
+        </h1>
         <div class="d-grid gap-3">
             {% for autopart in autoparts %}
-                {% include('components/autopart.html.twig') %}
+                {% include('components/autopart_in_favorite.html.twig') %}
             {% endfor %}
         </div>
     </div>

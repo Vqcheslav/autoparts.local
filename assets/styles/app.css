@@ -49,6 +49,32 @@ body {
     background-color: #D9D9D9;
 }
 
+.autopart-card-btn {
+    padding: 20px;
+    height: 50px;
+    text-align: center;
+}
+
+.autopart-card-like-btn {
+    background: center / 32px url("/public/img/components/heart.svg") no-repeat;
+}
+
+.autopart-card-like-btn.liked {
+    background: center / 32px url("/public/img/components/heart_full.svg") no-repeat;
+}
+
+.autopart-card-cart-btn {
+    background: center / 32px url("/public/img/components/cart_add.svg") no-repeat;
+}
+
+.autopart-card-cart-btn.in-cart {
+    background: center / 32px url("/public/img/components/cart_close.svg") no-repeat;
+}
+
+.autopart-card-buy-btn {
+    background: right 10px center / 32px url("/public/img/components/cart.svg") no-repeat;
+}
+
 .animation-appear {
     animation: 0.6s ease-in-out appear;
 }

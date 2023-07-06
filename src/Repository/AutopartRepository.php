@@ -59,7 +59,7 @@ class AutopartRepository extends ServiceEntityRepository
     public function getFavoritesByUser(User $user)
     {
         return $this->createQueryBuilder('a')
-            ->join('a.favourites', 'f')
+            ->join('App\Entity\Favorite', 'f', Join::WITH, "f.autopart= a")
             ->andWhere('f.user = :user')
             ->setParameter('user', $user)
             ->getQuery()
@@ -69,7 +69,7 @@ class AutopartRepository extends ServiceEntityRepository
     public function getInCartByUser(User $user)
     {
         return $this->createQueryBuilder('a')
-            ->join('a.carts', 'c')
+            ->join('App\Entity\Cart', 'c', Join::WITH, "c.autopart= a")
             ->andWhere('c.user = :user')
             ->setParameter('user', $user)
             ->getQuery()

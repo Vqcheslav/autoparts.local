@@ -32,6 +32,10 @@ class UserController extends AbstractController
     #[Route('/profile', name: 'profile', methods: ['GET', 'HEAD'])]
     public function showProfile(): Response
     {
+        if (! $this->isGranted('ROLE_USER')) {
+            return $this->redirectToRoute('login');
+        }
+
         return $this->render('profile.html.twig');
     }
 

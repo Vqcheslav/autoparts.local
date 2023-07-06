@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Корзина - Магазин автозапчастей{% endblock %}
+
+{% block content %}
+    <div class="container min-vh-100 py-3">
+        <h1 class="mb-4">
+            Корзина
+        </h1>
+        <div class="d-grid gap-3">
+            {% for autopart in autoparts %}
+                {% include('components/autopart_in_cart.html.twig') %}
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

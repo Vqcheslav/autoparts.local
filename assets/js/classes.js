@@ -1,10 +1,12 @@
+import {Toast} from "bootstrap";
+
 function isEmpty(object) {
     return Object
         .values(object)
         .every(val => typeof val === "undefined");
 }
 
-class Cookie
+export class Cookie
 {
     static getCookie(key = '') {
         return document.cookie
@@ -42,7 +44,7 @@ class Cookie
     }
 }
 
-class Server
+export class Server
 {
     static getQueryParameter(parameter) {
         let getParameters = new Proxy(new URLSearchParams(window.location.search), {
@@ -57,6 +59,12 @@ class Server
             'Authorization': `Bearer ${Server.getApiToken()}`,
         };
     };
+
+    static getAcceptHeader() {
+        return {
+            'Accept': 'application/json',
+        };
+    }
 
     static getContentAcceptHeaders() {
         return {
@@ -243,7 +251,7 @@ class Server
     }
 }
 
-class Url
+export class Url
 {
     static regexOfLocales = /\/(ru|en)\/*/;
     static arrayOfLocales = ['ru', 'en'];
@@ -295,7 +303,7 @@ class Url
     }
 }
 
-class Storage
+export class Storage
 {
     static set(
         key,
@@ -346,7 +354,7 @@ class Storage
     }
 }
 
-class DateTime
+export class DateTime
 {
     dateTime;
 
@@ -405,121 +413,41 @@ class DateTime
     }
 }
 
-class Toast
+export class ToastMessage
 {
-    static getGeneralDiv() {
-        return document.getElementById('toast-div');
-    }
-
-    static getMessageDiv() {
-        return document.getElementById('toast-message-div');
-    }
-
-    static levelsOfMessage = [
-        'message',
-        'success',
-        'warning',
-        'error',
-    ]
-
-    static showToastMessageWithTimeout(
-        title = 'toast.message.message',
-        message = 'toast.message.default',
-        level = 'message',
-        hideAfterSeconds = 5,
-        additionalInfo = ''
-    ) {
-        Toast.showToastMessage(title, message, level, additionalInfo);
-
-        if (hideAfterSeconds > 0) {
-            let timeout = hideAfterSeconds * 1000;
-
-            setTimeout(
-                Toast.hideToastMessageAfterTimeout,
-                timeout,
-                timeout
-            );
-        }
-    }
-
     static showToastMessage(
-        title = 'toast.message.message',
-        message = 'toast.message.default',
-        level = 'message',
-        additionalInfo = ''
+        title = 'Validation Error',
+        message = 'Please check the entered data',
+        level = 'message'
     ) {
-        if (! this.levelsOfMessage.includes(level)) {
-            return false;
-        }
+        let toastDiv = document.querySelector('.toast');
 
-        // title = getToastMessage(title);
-        message = message + ' ' + additionalInfo;
+        toastDiv.querySelector('.toast-level').classList.add('level-' + level);
+        toastDiv.querySelector('.toast-title').innerText = title;
+        toastDiv.querySelector('.toast-body').innerText = message;
 
-        Toast.getGeneralDiv().classList.remove('d-none-important');
-        Toast.getGeneralDiv().dataset.time = (new Date()).getTime().toString();
+        let bsToast = new Toast(toastDiv);
 
-        Toast.removeLevelsFromToastMessage();
-        Toast.addClassesBeforeShowingToast();
-        Toast.getMessageDiv().classList.add('toast-' + level);
-        Toast.getMessageDiv().querySelector('.toast-message-p').innerHTML = `
-            <span class="toast-title">${title}</span>
-            ${message}
-        `;
+        bsToast.show();
     }
 
     static hideToastMessage() {
-        Toast.addClassesBeforeRemovingToast();
+        let toastDiv = document.querySelector('.toast');
+        let bsToast = new Toast(toastDiv);
 
-        setTimeout(() => {
-            Toast.getGeneralDiv().classList.add('d-none-important');
-            Toast.removeLevelsFromToastMessage();
-        }, 600);
-    }
-
-    static hideToastMessageAfterTimeout(timeout) {
-        let neededTimeToClose = Number(Toast.getGeneralDiv().dataset.time) + timeout;
-        let nowTime = (new Date()).getTime();
-
-        if (neededTimeToClose > nowTime) {
-            return;
-        }
-
-        Toast.hideToastMessage();
-    }
-
-    static addClassesBeforeShowingToast() {
-        Toast.getGeneralDiv().classList.remove('animation-disappear');
-        Toast.getGeneralDiv().classList.add('animation-appear');
-    }
-
-    static addClassesBeforeRemovingToast() {
-        Toast.getGeneralDiv().classList.remove('animation-appear');
-        Toast.getGeneralDiv().classList.add('animation-disappear');
-    }
-
-    static removeLevelsFromToastMessage() {
-        Toast.getMessageDiv().classList.remove(
-            'toast-message',
-            'toast-success',
-            'toast-warning',
-            'toast-error',
-            'animation-appear',
-            'animation-disappear',
-        );
+        bsToast.hide();
     }
 
     static showServerError(error = '404') {
-        Toast.showToastMessageWithTimeout(
-            'toast.error.error',
-            'toast.error.incorrect_request',
-            'error',
-            5,
-            error
+        this.showToastMessageWithTimeout(
+            'Произошла ошибка',
+            'Неверный запрос: ' + error,
+            'error'
         );
     }
 }
 
-class DomElement
+export class DomElement
 {
     static addClassForElements(someClass, ...elements) {
         elements.forEach(function (element) {
@@ -577,7 +505,7 @@ class DomElement
     }
 }
 
-class Siblings
+export class Siblings
 {
     static getSibling(element, type = 'next') {
         if (type === 'previous') {
