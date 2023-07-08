@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ autopart.title }} - Магазин автозапчастей{% endblock %}
+
+{% block content %}
+    <div class="container min-vh-100 py-3">
+        <h1 class="mb-4">
+            {{ autopart.title }}
+        </h1>
+        <div class="d-grid gap-1 mb-3">
+            <p class="small m-0">
+                Добавлено: {{ autopart.createdAt|format_datetime('short', 'short', locale='ru') }}
+            </p>
+            <p class="small m-0">
+                Обновлено: {{ autopart.updatedAt|format_datetime('short', 'short', locale='ru') }}
+            </p>
+        </div>
+        <div class="d-grid gap-3">
+            <p class="m-0">
+                Для {{ autopart.car }}
+            </p>
+            <p class="m-0">
+                Склад: {{ autopart.warehouse }}
+            </p>
+            <p class="m-0">
+                {{ autopart.description }}
+            </p>
+        </div>
+    </div>
+{% endblock %}

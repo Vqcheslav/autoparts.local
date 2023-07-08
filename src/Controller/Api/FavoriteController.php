@@ -2,11 +2,14 @@
 
 namespace App\Controller\Api;
 
-use App\Entity\User;
+use App\Model\FavoriteDTO;
 use App\Service\AutopartService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Serializer\Context\Normalizer\ObjectNormalizerContextBuilder;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 
 class FavoriteController extends AbstractController
 {
@@ -15,11 +18,25 @@ class FavoriteController extends AbstractController
     ) {
     }
 
-    #[Route('/api/autoparts/favorites/{user}/{isInCart}', name: 'api.autoparts.favorites', methods: ['GET', 'HEAD'])]
-    public function index(User $user, bool $isInCart = false): JsonResponse
+    #[Route('/api/autoparts/favorites/{user}/{autopart}', name: 'api.autoparts.favorites', methods: ['POST'])]
+    public function index(
+        #[MapRequestPayload(acceptFormat: 'json')] FavoriteDTO $favoriteDTO,
+        ObjectNormalizer $normalizer
+    ): JsonResponse
     {
-        $autoparts = $this->autopartService->getFavoritesByUser($user);
+        $favorite = $this->autopartService->createFavorite($favoriteDTO);
+        $context = (new ObjectNormalizerContextBuilder())
+            ->withGroups('show')
+            ->toArray();
+        $normalized = $normalizer->normalize($favorite, null, $context);
+        $status = 201;
+        $data = [
+            'ok' => true,
+            'status' => $status,
+            'detail' => 'Добавлено в избранное',
+            'data' => $normalized,
+        ];
 
-        return $this->json(['data' => $autoparts], 200);
+        return $this->json($data, $status);
     }
 }

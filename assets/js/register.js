@@ -8,7 +8,7 @@ document.querySelectorAll('.register-form').forEach(function (element) {
         DomElement.hide(messageDiv)
 
         let formData = new FormData(this);
-        let response = await Server.postData('/api/register', formData, Server.getAcceptHeader());
+        let response = await Server.postData('/api/user/register', formData, Server.getAcceptHeader());
 
         console.log(response);
 

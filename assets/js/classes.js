@@ -114,7 +114,7 @@ export class Server
             if (! Array.isArray(parsedResponse.data) && typeof parsedResponse.data !== 'object') {
                 isOkResponse = false;
 
-                Toast.showToastMessageWithTimeout(
+                ToastMessage.showToastMessage(
                     'toast.error.error',
                     'toast.error.incorrect_response',
                     'error',
@@ -227,7 +227,7 @@ export class Server
             let isOkResponse = this.checkResponse(await response, await parsedResponse);
 
             if (isOkResponse) {
-                Toast.showToastMessageWithTimeout(
+                ToastMessage.showToastMessage(
                     'toast.success.success',
                     'toast.success.deleted',
                     'success'
@@ -245,7 +245,7 @@ export class Server
 
         let error = (responseJson && responseJson.message) || response.status;
 
-        Toast.showServerError(error);
+        ToastMessage.showServerError(error);
 
         return false;
     }
@@ -439,7 +439,7 @@ export class ToastMessage
     }
 
     static showServerError(error = '404') {
-        this.showToastMessageWithTimeout(
+        this.showToastMessage(
             'Произошла ошибка',
             'Неверный запрос: ' + error,
             'error'

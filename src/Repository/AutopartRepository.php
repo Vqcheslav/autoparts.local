@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Autopart;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -56,10 +57,25 @@ class AutopartRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    /**
+     * @throws NonUniqueResultException
+     */
+    public function getAutopartById(string $autopartId): ?Autopart
+    {
+        return $this->createQueryBuilder('a')
+            ->select('a', 'c', 'w')
+            ->join('a.car', 'c')
+            ->join('a.warehouse', 'w')
+            ->andWhere('a.autopartId = :autopartId')
+            ->setParameter('autopartId', $autopartId)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
     public function getFavoritesByUser(User $user)
     {
         return $this->createQueryBuilder('a')
-            ->join('App\Entity\Favorite', 'f', Join::WITH, "f.autopart= a")
+            ->join('App\Entity\Favorite', 'f', Join::WITH, "f.autopart = a")
             ->andWhere('f.user = :user')
             ->setParameter('user', $user)
             ->getQuery()

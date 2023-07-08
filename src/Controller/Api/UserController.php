@@ -18,7 +18,7 @@ class UserController extends AbstractController
     ) {
     }
 
-    #[Route('/api/register', name: 'api.register', methods: ['POST'])]
+    #[Route('/api/user/register', name: 'api.user.register', methods: ['POST'])]
     public function register(
         #[MapRequestPayload(acceptFormat: 'form')] UserDTO $userDTO,
         ObjectNormalizer $normalizer
