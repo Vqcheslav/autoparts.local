@@ -8,13 +8,15 @@ use App\Entity\User;
 use App\Model\FavoriteDTO;
 use App\Repository\AutopartRepository;
 use App\Repository\FavoriteRepository;
+use App\Repository\UserRepository;
 use Doctrine\ORM\NonUniqueResultException;
 
 class AutopartService
 {
     public function __construct(
         private readonly AutopartRepository $autopartRepository,
-        private readonly FavoriteRepository $favoriteRepository
+        private readonly FavoriteRepository $favoriteRepository,
+        private readonly UserRepository $userRepository
     ) {
     }
 
@@ -40,12 +42,23 @@ class AutopartService
     {
         $favorite = new Favorite();
         $favorite->setUser(
-            $this->favoriteRepository->find($favoriteDTO->userId)
+            $this->userRepository->find($favoriteDTO->userId)
         );
         $favorite->setAutopart(
             $this->autopartRepository->find($favoriteDTO->autopartId)
         );
         $this->favoriteRepository->save($favorite, true);
+
+        return $favorite;
+    }
+
+    /**
+     * @throws NonUniqueResultException
+     */
+    public function deleteFavorite(FavoriteDTO $favoriteDTO): string
+    {
+        $favorite = $this->favoriteRepository->getByUserIdAndAutopartId($favoriteDTO->userId, $favoriteDTO->autopartId);
+        $this->favoriteRepository->remove($favorite, true);
 
         return $favorite;
     }

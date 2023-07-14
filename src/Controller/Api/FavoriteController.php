@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\Context\Normalizer\ObjectNormalizerContextBuilder;
-use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 class FavoriteController extends AbstractController
 {
@@ -18,10 +18,10 @@ class FavoriteController extends AbstractController
     ) {
     }
 
-    #[Route('/api/autoparts/favorites/{user}/{autopart}', name: 'api.autoparts.favorites', methods: ['POST'])]
-    public function index(
+    #[Route('/api/autoparts/favorites', name: 'api.favorites.create', methods: ['POST'])]
+    public function create(
         #[MapRequestPayload(acceptFormat: 'json')] FavoriteDTO $favoriteDTO,
-        ObjectNormalizer $normalizer
+        NormalizerInterface $normalizer
     ): JsonResponse
     {
         $favorite = $this->autopartService->createFavorite($favoriteDTO);
@@ -35,6 +35,24 @@ class FavoriteController extends AbstractController
             'status' => $status,
             'detail' => 'Добавлено в избранное',
             'data' => $normalized,
+        ];
+
+        return $this->json($data, $status);
+    }
+
+    #[Route('/api/autoparts/favorites', name: 'api.favorites.delete', methods: ['DELETE'])]
+    public function delete(
+        #[MapRequestPayload(acceptFormat: 'json')] FavoriteDTO $favoriteDTO,
+        NormalizerInterface $normalizer
+    ): JsonResponse
+    {
+        $favoriteId = $this->autopartService->deleteFavorite($favoriteDTO);
+        $status = 204;
+        $data = [
+            'ok' => true,
+            'status' => $status,
+            'detail' => 'Удалено из избранного',
+            'data' => ['favoriteId' => $favoriteId],
         ];
 
         return $this->json($data, $status);

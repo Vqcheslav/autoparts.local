@@ -1,9 +1,10 @@
-import {ToastMessage} from './classes';
+import {Server, ToastMessage} from './classes';
 
 document.querySelectorAll('.autopart-card-like-btn').forEach(function (element) {
-    element.addEventListener('click', function () {
+    element.addEventListener('click', async function () {
         let autopartId = this.dataset.autopartId;
         let userId = this.dataset.userId;
+        let data = JSON.stringify({userId, autopartId});
 
         if (! isUserLoggedIn(userId)) {
             return;
@@ -11,8 +12,43 @@ document.querySelectorAll('.autopart-card-like-btn').forEach(function (element) 
 
         if (this.classList.toggle('liked')) {
             console.log('Added like to ' + autopartId);
+
+            let result = await Server.postData('/api/autoparts/favorites', data, Server.getContentAcceptHeaders())
+
+            console.log(result);
+            if (result.status === 201) {
+                ToastMessage.showToastMessage(
+                    'Успех',
+                    'Товар добавлен в избранное',
+                    'success'
+                );
+            } else {
+                ToastMessage.showToastMessage(
+                    'Ошибка',
+                    'Не удалось добавить товар в избранное',
+                    'error'
+                );
+            }
         } else {
             console.log('Removed like to ' + autopartId);
+
+            let result = await Server.deleteData('/api/autoparts/favorites', data, Server.getContentAcceptHeaders())
+
+            console.log(result);
+
+            if (result.status === 204) {
+                ToastMessage.showToastMessage(
+                    'Успех',
+                    'Товар удален из избранного',
+                    'success'
+                );
+            } else {
+                ToastMessage.showToastMessage(
+                    'Ошибка',
+                    'Не удалось удалить товар из избранного',
+                    'error'
+                );
+            }
         }
     });
 });

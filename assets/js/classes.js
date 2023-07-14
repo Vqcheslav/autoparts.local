@@ -204,6 +204,7 @@ export class Server
 
     static async deleteData(
         uri = '',
+        data = {},
         headers = {},
         withErrorHandling = true
     ) {
@@ -215,9 +216,7 @@ export class Server
         let parameters = {
             method: 'DELETE',
             headers: headers,
-            body: JSON.stringify({
-                '_token': Server.getCsrfToken(),
-            }),
+            body: data,
             credentials: 'include',
         };
 

@@ -4,8 +4,11 @@ namespace App\Entity;
 
 use App\Repository\CartRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 #[ORM\Entity(repositoryClass: CartRepository::class)]
+#[ORM\UniqueConstraint(fields: ['user', 'autopart'])]
+#[UniqueEntity(fields: ['user', 'autopart'], message: 'Already in cart',)]
 class Cart
 {
     #[ORM\Id]

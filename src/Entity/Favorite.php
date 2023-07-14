@@ -5,8 +5,11 @@ namespace App\Entity;
 use App\Repository\FavoriteRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 #[ORM\Entity(repositoryClass: FavoriteRepository::class)]
+#[ORM\UniqueConstraint(fields: ['user', 'autopart'])]
+#[UniqueEntity(fields: ['user', 'autopart'], message: 'Already in favorites',)]
 class Favorite
 {
     #[ORM\Id]

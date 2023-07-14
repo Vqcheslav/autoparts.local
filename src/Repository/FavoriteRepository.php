@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Favorite;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -38,6 +39,20 @@ class FavoriteRepository extends ServiceEntityRepository
         if ($flush) {
             $this->getEntityManager()->flush();
         }
+    }
+
+    /**
+     * @throws NonUniqueResultException
+     */
+    public function getByUserIdAndAutopartId(string $userId, string $autopartId): ?Favorite
+    {
+        return $this->createQueryBuilder('f')
+            ->andWhere('f.user = :user')
+            ->andWhere('f.autopart = :autopart')
+            ->setParameter('user', $userId)
+            ->setParameter('autopart', $autopartId)
+            ->getQuery()
+            ->getOneOrNullResult();
     }
 
 //    /**
