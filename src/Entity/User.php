@@ -17,15 +17,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\Column(type: 'guid', unique: true)]
-    #[Groups(['show_user'])]
+    #[Groups(['show'])]
     private ?string $userId = null;
 
     #[ORM\Column(length: 180, unique: true)]
-    #[Groups(['show_user'])]
+    #[Groups(['show'])]
     private ?string $email = null;
 
     #[ORM\Column]
-    #[Groups(['show_user'])]
+    #[Groups(['show'])]
     private array $roles = [];
 
     /**

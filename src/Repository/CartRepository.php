@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Cart;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -37,6 +38,21 @@ class CartRepository extends ServiceEntityRepository
         if ($flush) {
             $this->getEntityManager()->flush();
         }
+    }
+
+
+    /**
+     * @throws NonUniqueResultException
+     */
+    public function getByUserIdAndAutopartId(string $userId, string $autopartId): ?Cart
+    {
+        return $this->createQueryBuilder('c')
+            ->andWhere('c.user = :user')
+            ->andWhere('c.autopart = :autopart')
+            ->setParameter('user', $userId)
+            ->setParameter('autopart', $autopartId)
+            ->getQuery()
+            ->getOneOrNullResult();
     }
 
 //    /**

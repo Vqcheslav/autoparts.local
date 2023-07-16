@@ -6,21 +6,26 @@ use App\Repository\ManufacturerRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: ManufacturerRepository::class)]
 class Manufacturer
 {
     #[ORM\Id]
     #[ORM\Column(type: 'guid', unique: true)]
+    #[Groups(['show'])]
     private ?string $manufacturerId = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['show'])]
     private ?string $title = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['show'])]
     private ?string $description = null;
 
     #[ORM\Column(length: 2)]
+    #[Groups(['show'])]
     private ?string $country = null;
 
     #[ORM\OneToMany(mappedBy: 'manufacturer', targetEntity: Autopart::class, orphanRemoval: true)]

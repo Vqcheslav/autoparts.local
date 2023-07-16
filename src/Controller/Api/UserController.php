@@ -2,6 +2,7 @@
 
 namespace App\Controller\Api;
 
+use App\Model\ResponseDTO;
 use App\Model\UserDTO;
 use App\Service\UserService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -25,16 +26,16 @@ class UserController extends AbstractController
     ): Response {
         $user = $this->userService->create($userDTO);
         $context = (new ObjectNormalizerContextBuilder())
-            ->withGroups('show_user')
+            ->withGroups('show')
             ->toArray();
         $normalized = $normalizer->normalize($user, null, $context);
         $status = 201;
-        $data = [
-            'ok' => true,
-            'status' => $status,
-            'detail' => 'Вы успешно зарегистрировались. Пожалуйста, войдите через форму входа',
-            'data' => $normalized,
-        ];
+        $data = new ResponseDTO(
+            true,
+            $status,
+            'Вы успешно зарегистрировались. Пожалуйста, войдите через форму входа',
+            $normalized
+        );
 
         return $this->json($data, $status);
     }

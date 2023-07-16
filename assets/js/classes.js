@@ -414,6 +414,30 @@ export class DateTime
 
 export class ToastMessage
 {
+    static showNotificationMessage(
+        message = 'Notification',
+    ) {
+        this.showToastMessage('Сообщение', message, 'message');
+    }
+
+    static showSuccessMessage(
+        message = 'Success',
+    ) {
+        this.showToastMessage('Успех', message, 'success');
+    }
+
+    static showWarningMessage(
+        message = 'Warning',
+    ) {
+        this.showToastMessage('Внимание', message, 'warning');
+    }
+
+    static showErrorMessage(
+        message = 'Error',
+    ) {
+        this.showToastMessage('Произошла ошибка', message, 'error');
+    }
+
     static showToastMessage(
         title = 'Validation Error',
         message = 'Please check the entered data',

@@ -11,61 +11,51 @@ document.querySelectorAll('.autopart-card-like-btn').forEach(function (element) 
         }
 
         if (this.classList.toggle('liked')) {
-            console.log('Added like to ' + autopartId);
-
             let result = await Server.postData('/api/autoparts/favorites', data, Server.getContentAcceptHeaders())
 
-            console.log(result);
             if (result.status === 201) {
-                ToastMessage.showToastMessage(
-                    'Успех',
-                    'Товар добавлен в избранное',
-                    'success'
-                );
+                ToastMessage.showSuccessMessage(result.detail);
             } else {
-                ToastMessage.showToastMessage(
-                    'Ошибка',
-                    'Не удалось добавить товар в избранное',
-                    'error'
-                );
+                ToastMessage.showWarningMessage(result.detail);
             }
         } else {
-            console.log('Removed like to ' + autopartId);
-
             let result = await Server.deleteData('/api/autoparts/favorites', data, Server.getContentAcceptHeaders())
 
-            console.log(result);
-
             if (result.status === 204) {
-                ToastMessage.showToastMessage(
-                    'Успех',
-                    'Товар удален из избранного',
-                    'success'
-                );
+                ToastMessage.showSuccessMessage('Товар удален из избранного');
             } else {
-                ToastMessage.showToastMessage(
-                    'Ошибка',
-                    'Не удалось удалить товар из избранного',
-                    'error'
-                );
+                ToastMessage.showErrorMessage('Не удалось удалить товар из избранного');
             }
         }
     });
 });
 
 document.querySelectorAll('.autopart-card-cart-btn').forEach(function (element) {
-    element.addEventListener('click', function () {
+    element.addEventListener('click', async function () {
         let autopartId = this.dataset.autopartId;
         let userId = this.dataset.userId;
+        let data = JSON.stringify({userId, autopartId});
 
         if (! isUserLoggedIn(userId)) {
             return;
         }
 
         if (this.classList.toggle('in-cart')) {
-            console.log('Added ' + autopartId + ' to cart');
+            let result = await Server.postData('/api/autoparts/carts', data, Server.getContentAcceptHeaders())
+
+            if (result.status === 201) {
+                ToastMessage.showSuccessMessage(result.detail);
+            } else {
+                ToastMessage.showWarningMessage(result.detail);
+            }
         } else {
-            console.log('Removed ' + autopartId + ' from cart');
+            let result = await Server.deleteData('/api/autoparts/carts', data, Server.getContentAcceptHeaders())
+
+            if (result.status === 204) {
+                ToastMessage.showSuccessMessage('Товар удален из корзины');
+            } else {
+                ToastMessage.showErrorMessage('Не удалось удалить товар из корзины');
+            }
         }
     });
 });

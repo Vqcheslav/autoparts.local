@@ -6,27 +6,33 @@ use App\Repository\WarehouseRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: WarehouseRepository::class)]
 class Warehouse
 {
     #[ORM\Id]
     #[ORM\Column(type: 'guid', unique: true)]
+    #[Groups(['show'])]
     private ?string $warehouseId = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['show'])]
     private ?string $address = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['show'])]
     private ?string $openingHours = null;
 
     #[ORM\OneToMany(mappedBy: 'warehouse', targetEntity: Autopart::class)]
     private Collection $autoparts;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['show'])]
     private ?string $workingDays = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['show'])]
     private ?string $phoneNumber = null;
 
     public function __construct()

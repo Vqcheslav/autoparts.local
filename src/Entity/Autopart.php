@@ -7,18 +7,22 @@ use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: AutopartRepository::class)]
 class Autopart
 {
     #[ORM\Id]
     #[ORM\Column(type: 'guid', unique: true)]
+    #[Groups(['show'])]
     private ?string $autopartId = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['show'])]
     private ?string $title = null;
 
     #[ORM\Column(length: 2000)]
+    #[Groups(['show'])]
     private ?string $description = null;
 
     #[ORM\OneToMany(mappedBy: 'autopart', targetEntity: AutopartOrder::class, orphanRemoval: true)]
@@ -26,20 +30,25 @@ class Autopart
 
     #[ORM\ManyToOne(inversedBy: 'autoparts')]
     #[ORM\JoinColumn(referencedColumnName: 'car_id', nullable: false)]
+    #[Groups(['show'])]
     private ?Car $car = null;
 
     #[ORM\ManyToOne(inversedBy: 'autoparts')]
     #[ORM\JoinColumn(referencedColumnName: 'warehouse_id', nullable: false)]
+    #[Groups(['show'])]
     private ?Warehouse $warehouse = null;
 
     #[ORM\Column]
+    #[Groups(['show'])]
     private ?DateTimeImmutable $updatedAt = null;
 
     #[ORM\Column]
+    #[Groups(['show'])]
     private ?DateTimeImmutable $createdAt = null;
 
     #[ORM\ManyToOne(inversedBy: 'autoparts')]
     #[ORM\JoinColumn(referencedColumnName: 'manufacturer_id', nullable: false)]
+    #[Groups(['show'])]
     private ?Manufacturer $manufacturer = null;
 
     #[ORM\OneToMany(mappedBy: 'autopart', targetEntity: Favorite::class, orphanRemoval: true)]

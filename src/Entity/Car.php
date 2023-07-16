@@ -7,30 +7,38 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: CarRepository::class)]
 class Car
 {
     #[ORM\Id]
     #[ORM\Column(type: 'guid', unique: true)]
+    #[Groups(['show'])]
     private ?string $carId = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['show'])]
     private ?string $manufacturer = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['show'])]
     private ?string $brand = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['show'])]
     private ?string $model = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['show'])]
     private ?string $generation = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['show'])]
     private ?string $engine = null;
 
     #[ORM\Column(type: Types::SMALLINT)]
+    #[Groups(['show'])]
     private ?int $year = null;
 
     #[ORM\OneToMany(mappedBy: 'car', targetEntity: Autopart::class, orphanRemoval: true)]
