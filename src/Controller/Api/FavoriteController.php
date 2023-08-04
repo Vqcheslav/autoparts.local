@@ -19,43 +19,21 @@ class FavoriteController extends AbstractController
     ) {
     }
 
-    #[Route('/api/autoparts/favorites', name: 'api.favorites.create', methods: ['POST'])]
-    public function create(
-        #[MapRequestPayload(acceptFormat: 'json')] FavoriteDTO $favoriteDTO,
-        NormalizerInterface $normalizer
+    #[Route('/api/autoparts/favorites', name: 'api.favorites.toggle', methods: ['POST'])]
+    public function toggle(
+        #[MapRequestPayload(acceptFormat: 'json')] FavoriteDTO $favoriteDTO
     ): JsonResponse
     {
-        $favorite = $this->autopartService->createFavorite($favoriteDTO);
+        $flag = $this->autopartService->toggleFavorite($favoriteDTO);
+        $detail = 'Товар удален из избранного';
 
-        if (is_null($favorite)) {
-            $status = 409;
-            $data = new ResponseDTO(false, $status, 'Уже в избранном', []);
-
-            return $this->json($data, $status);
+        if ($flag) {
+            $detail = 'Добавлено в избранное';
         }
 
-        $context = (new ObjectNormalizerContextBuilder())
-            ->withGroups('show')
-            ->toArray();
-        $normalized = $normalizer->normalize($favorite, null, $context);
-        $status = 201;
-        $data = new ResponseDTO(true, $status, 'Добавлено в избранное', $normalized);
+        $status = 200;
+        $data = new ResponseDTO(true, $status, $detail, ['added' => $flag]);
 
         return $this->json($data, $status);
-    }
-
-    #[Route('/api/autoparts/favorites', name: 'api.favorites.delete', methods: ['DELETE'])]
-    public function delete(#[MapRequestPayload(acceptFormat: 'json')] FavoriteDTO $favoriteDTO): JsonResponse
-    {
-        $favoriteId = $this->autopartService->deleteFavorite($favoriteDTO);
-
-        if (is_null($favoriteId)) {
-            $status = 404;
-            $data = new ResponseDTO(true, $status, 'Не найдено', []);
-
-            return $this->json($data, $status);
-        }
-
-        return $this->json([], 204);
     }
 }

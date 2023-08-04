@@ -15,7 +15,7 @@ class ResponseDTO
         #[Assert\Length(min: 1, max: 255)]
         public string $detail,
 
-        public array|object $data
+        public mixed $data
     ) {
     }
 }

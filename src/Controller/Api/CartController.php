@@ -19,43 +19,21 @@ class CartController extends AbstractController
     ) {
     }
 
-    #[Route('/api/autoparts/carts', name: 'api.carts.create', methods: ['POST'])]
-    public function create(
-        #[MapRequestPayload(acceptFormat: 'json')] CartDTO $cartDto,
-        NormalizerInterface $normalizer
+    #[Route('/api/autoparts/carts', name: 'api.carts.toggle', methods: ['POST'])]
+    public function toggle(
+        #[MapRequestPayload(acceptFormat: 'json')] CartDTO $cartDTO
     ): JsonResponse
     {
-        $cart = $this->autopartService->createCart($cartDto);
+        $added = $this->autopartService->toggleCart($cartDTO);
+        $detail = 'Товар удален из корзины';
 
-        if (is_null($cart)) {
-            $status = 409;
-            $data = new ResponseDTO(false, $status, 'Уже в корзине', []);
-
-            return $this->json($data, $status);
+        if ($added) {
+            $detail = 'Добавлено в корзину';
         }
 
-        $context = (new ObjectNormalizerContextBuilder())
-            ->withGroups('show')
-            ->toArray();
-        $normalized = $normalizer->normalize($cart, null, $context);
-        $status = 201;
-        $data = new ResponseDTO(true, $status, 'Добавлено в корзину', $normalized);
+        $status = 200;
+        $data = new ResponseDTO(true, $status, $detail, ['added' => $added]);
 
         return $this->json($data, $status);
-    }
-
-    #[Route('/api/autoparts/carts', name: 'api.carts.delete', methods: ['DELETE'])]
-    public function delete(#[MapRequestPayload(acceptFormat: 'json')] CartDTO $cartDto): JsonResponse
-    {
-        $cartId = $this->autopartService->deleteCart($cartDto);
-
-        if (is_null($cartId)) {
-            $status = 404;
-            $data = new ResponseDTO(true, $status, 'Не найдено', []);
-
-            return $this->json($data, $status);
-        }
-
-        return $this->json([], 204);
     }
 }

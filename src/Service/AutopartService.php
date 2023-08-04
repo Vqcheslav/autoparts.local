@@ -11,9 +11,9 @@ use App\Model\FavoriteDTO;
 use App\Repository\AutopartRepository;
 use App\Repository\CartRepository;
 use App\Repository\FavoriteRepository;
-use App\Repository\UserRepository;
-use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\NonUniqueResultException;
+use Exception;
 
 class AutopartService
 {
@@ -21,7 +21,7 @@ class AutopartService
         private readonly AutopartRepository $autopartRepository,
         private readonly FavoriteRepository $favoriteRepository,
         private readonly CartRepository $cartRepository,
-        private readonly UserRepository $userRepository
+        private readonly EntityManagerInterface $em
     ) {
     }
 
@@ -43,42 +43,68 @@ class AutopartService
         return $this->autopartRepository->getAutopartById($autopartId);
     }
 
+    /**
+     * @throws NonUniqueResultException
+     */
+    public function toggleFavorite(FavoriteDTO $favoriteDTO): bool
+    {
+        $favorite = $this->favoriteRepository->getByUserIdAndAutopartId($favoriteDTO->userId, $favoriteDTO->autopartId);
+
+        if ($favorite === null) {
+            $this->createFavorite($favoriteDTO);
+
+            return true;
+        }
+
+        $this->removeFavorite($favorite);
+
+        return false;
+    }
+
     public function createFavorite(FavoriteDTO $favoriteDTO): ?Favorite
     {
         try {
             $favorite = new Favorite();
             $favorite->setUser(
-                $this->userRepository->find($favoriteDTO->userId)
+                $this->getEntityManager()->getReference(User::class, $favoriteDTO->userId)
             );
             $favorite->setAutopart(
-                $this->autopartRepository->find($favoriteDTO->autopartId)
+                $this->getEntityManager()->getReference(Autopart::class, $favoriteDTO->autopartId)
             );
             $this->favoriteRepository->save($favorite, true);
-        } catch (UniqueConstraintViolationException) {
+        } catch (Exception) {
             return null;
         }
 
         return $favorite;
     }
 
+    public function removeFavorite(Favorite $favorite): void
+    {
+//        $this->favoriteRepository->removeByUserIdAndAutopartId(
+//            $favoriteDTO->userId,
+//            $favoriteDTO->autopartId
+//        );
+
+        $this->favoriteRepository->remove($favorite, true);
+    }
+
     /**
      * @throws NonUniqueResultException
      */
-    public function deleteFavorite(FavoriteDTO $favoriteDTO): ?string
+    public function toggleCart(CartDTO $cartDTO): bool
     {
-        $favorite = $this->favoriteRepository->getByUserIdAndAutopartId(
-            $favoriteDTO->userId,
-            $favoriteDTO->autopartId
-        );
+        $cart = $this->cartRepository->getByUserIdAndAutopartId($cartDTO->userId, $cartDTO->autopartId);
 
-        if (is_null($favorite)) {
-            return null;
+        if ($cart === null) {
+            $this->createCart($cartDTO);
+
+            return true;
         }
 
-        $favoriteId = $favorite->getFavoriteId();
-        $this->favoriteRepository->remove($favorite, true);
+        $this->removeCart($cart);
 
-        return $favoriteId;
+        return false;
     }
 
     public function createCart(CartDTO $cartDTO): ?Cart
@@ -86,37 +112,27 @@ class AutopartService
         try {
             $cart = new Cart();
             $cart->setUser(
-                $this->userRepository->find($cartDTO->userId)
+                $this->getEntityManager()->getReference(User::class, $cartDTO->userId)
             );
             $cart->setAutopart(
-                $this->autopartRepository->find($cartDTO->autopartId)
+                $this->getEntityManager()->getReference(Autopart::class, $cartDTO->autopartId)
             );
             $this->cartRepository->save($cart, true);
-        } catch (UniqueConstraintViolationException) {
+        } catch (Exception) {
             return null;
         }
 
         return $cart;
     }
 
-    /**
-     * @throws NonUniqueResultException
-     */
-    public function deleteCart(CartDTO $cartDTO): ?string
+    public function removeCart(Cart $cart): void
     {
-        $cart = $this->cartRepository->getByUserIdAndAutopartId(
-            $cartDTO->userId,
-            $cartDTO->autopartId
-        );
+//        $this->cartRepository->removeByUserIdAndAutopartId(
+//            $cartDTO->userId,
+//            $cartDTO->autopartId
+//        );
 
-        if (is_null($cart)) {
-            return null;
-        }
-
-        $cartId = $cart->getCartId();
         $this->cartRepository->remove($cart, true);
-
-        return $cartId;
     }
 
     public function getFavoritesByUser(User $user): array
@@ -127,5 +143,10 @@ class AutopartService
     public function getInCartByUser(User $user): array
     {
         return $this->autopartRepository->getInCartByUser($user);
+    }
+
+    private function getEntityManager(): EntityManagerInterface
+    {
+        return $this->em;
     }
 }

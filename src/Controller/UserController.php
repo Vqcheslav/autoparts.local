@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use App\Service\UserService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Response;
@@ -29,13 +28,9 @@ class UserController extends AbstractController
         return $this->render('register.html.twig');
     }
 
-    #[Route('/profile', name: 'profile', methods: ['GET', 'HEAD'])]
+    #[Route('/user/profile', name: 'profile', methods: ['GET', 'HEAD'])]
     public function showProfile(): Response
     {
-        if (! $this->isGranted('ROLE_USER')) {
-            return $this->redirectToRoute('login');
-        }
-
         return $this->render('profile.html.twig');
     }
 

@@ -1,4 +1,4 @@
-import {Server, ToastMessage} from './classes';
+import {DomElement, Server, ToastMessage} from './classes';
 
 document.querySelectorAll('.autopart-card-like-btn').forEach(function (element) {
     element.addEventListener('click', async function () {
@@ -10,22 +10,24 @@ document.querySelectorAll('.autopart-card-like-btn').forEach(function (element) 
             return;
         }
 
-        if (this.classList.toggle('liked')) {
-            let result = await Server.postData('/api/autoparts/favorites', data, Server.getContentAcceptHeaders())
+        let result = await Server.postData('/api/autoparts/favorites', data, Server.getContentAcceptHeaders())
 
-            if (result.status === 201) {
-                ToastMessage.showSuccessMessage(result.detail);
-            } else {
-                ToastMessage.showWarningMessage(result.detail);
-            }
+        if (result.data.added === true) {
+            this.classList.add('liked');
         } else {
-            let result = await Server.deleteData('/api/autoparts/favorites', data, Server.getContentAcceptHeaders())
+            this.classList.remove('liked');
 
-            if (result.status === 204) {
-                ToastMessage.showSuccessMessage('Товар удален из избранного');
-            } else {
-                ToastMessage.showErrorMessage('Не удалось удалить товар из избранного');
+            let autopartElement = document.querySelector(`.autopart[data-autopart-id="${autopartId}"]`);
+
+            if (autopartElement.classList.contains('autopart-in-favorite')) {
+                DomElement.hideWithTimeout(autopartElement);
             }
+        }
+
+        if (result.status === 200) {
+            ToastMessage.showSuccessMessage(result.detail);
+        } else {
+            ToastMessage.showWarningMessage(result.detail);
         }
     });
 });
@@ -40,22 +42,24 @@ document.querySelectorAll('.autopart-card-cart-btn').forEach(function (element) 
             return;
         }
 
-        if (this.classList.toggle('in-cart')) {
-            let result = await Server.postData('/api/autoparts/carts', data, Server.getContentAcceptHeaders())
+        let result = await Server.postData('/api/autoparts/carts', data, Server.getContentAcceptHeaders())
 
-            if (result.status === 201) {
-                ToastMessage.showSuccessMessage(result.detail);
-            } else {
-                ToastMessage.showWarningMessage(result.detail);
-            }
+        if (result.data.added === true) {
+            this.classList.add('in-cart');
         } else {
-            let result = await Server.deleteData('/api/autoparts/carts', data, Server.getContentAcceptHeaders())
+            this.classList.remove('in-cart');
 
-            if (result.status === 204) {
-                ToastMessage.showSuccessMessage('Товар удален из корзины');
-            } else {
-                ToastMessage.showErrorMessage('Не удалось удалить товар из корзины');
+            let autopartElement = document.querySelector(`.autopart[data-autopart-id="${autopartId}"]`);
+
+            if (autopartElement.classList.contains('autopart-in-cart')) {
+                DomElement.hideWithTimeout(autopartElement);
             }
+        }
+
+        if (result.status === 200) {
+            ToastMessage.showSuccessMessage(result.detail);
+        } else {
+            ToastMessage.showWarningMessage(result.detail);
         }
     });
 });

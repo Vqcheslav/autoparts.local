@@ -40,7 +40,6 @@ class CartRepository extends ServiceEntityRepository
         }
     }
 
-
     /**
      * @throws NonUniqueResultException
      */
@@ -53,6 +52,18 @@ class CartRepository extends ServiceEntityRepository
             ->setParameter('autopart', $autopartId)
             ->getQuery()
             ->getOneOrNullResult();
+    }
+
+    public function removeByUserIdAndAutopartId(string $userId, string $autopartId): mixed
+    {
+        return $this->createQueryBuilder('c')
+            ->delete()
+            ->andWhere('c.user = :user')
+            ->andWhere('c.autopart = :autopart')
+            ->setParameter('user', $userId)
+            ->setParameter('autopart', $autopartId)
+            ->getQuery()
+            ->getResult();
     }
 
 //    /**

@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Autopart;
+use App\Entity\User;
 use App\Service\AutopartService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -34,5 +35,25 @@ class AutopartController extends AbstractController
         }
 
         return $this->render('autopart.html.twig', ['autopart' => $autopart]);
+    }
+
+    #[Route('/user/favorite', name: 'favorite')]
+    public function showFavorite(): Response
+    {
+        /* @var User $user*/
+        $user = $this->getUser();
+        $autoparts = $this->autopartService->getFavoritesByUser($user);
+
+        return $this->render('favorite.html.twig', ['autoparts' => $autoparts]);
+    }
+
+    #[Route('/user/cart', name: 'cart')]
+    public function showCart(): Response
+    {
+        /* @var User $user*/
+        $user = $this->getUser();
+        $autoparts = $this->autopartService->getInCartByUser($user);
+
+        return $this->render('cart.html.twig', ['autoparts' => $autoparts]);
     }
 }

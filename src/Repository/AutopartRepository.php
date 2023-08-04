@@ -78,6 +78,7 @@ class AutopartRepository extends ServiceEntityRepository
             ->join('App\Entity\Favorite', 'f', Join::WITH, "f.autopart = a")
             ->andWhere('f.user = :user')
             ->setParameter('user', $user)
+            ->addOrderBy('f.createdAt', 'DESC')
             ->getQuery()
             ->getResult();
     }
@@ -85,9 +86,10 @@ class AutopartRepository extends ServiceEntityRepository
     public function getInCartByUser(User $user)
     {
         return $this->createQueryBuilder('a')
-            ->join('App\Entity\Cart', 'c', Join::WITH, "c.autopart= a")
+            ->join('App\Entity\Cart', 'c', Join::WITH, "c.autopart = a")
             ->andWhere('c.user = :user')
             ->setParameter('user', $user)
+            ->addOrderBy('c.createdAt', 'DESC')
             ->getQuery()
             ->getResult();
     }

@@ -57,6 +57,15 @@ class Autopart
     #[ORM\OneToMany(mappedBy: 'autopart', targetEntity: Cart::class, orphanRemoval: true)]
     private Collection $carts;
 
+    #[ORM\Column(length: 255)]
+    private ?string $imagePath = null;
+
+    #[ORM\Column]
+    private ?int $price = null;
+
+    #[ORM\Column(length: 3)]
+    private ?string $currency = null;
+
     public function __construct()
     {
         $this->autopartId = uuid_create();
@@ -259,6 +268,42 @@ class Autopart
                 $cart->setAutopart(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getImagePath(): ?string
+    {
+        return $this->imagePath;
+    }
+
+    public function setImagePath(string $imagePath): static
+    {
+        $this->imagePath = $imagePath;
+
+        return $this;
+    }
+
+    public function getPrice(): ?int
+    {
+        return $this->price;
+    }
+
+    public function setPrice(int $price): static
+    {
+        $this->price = $price;
+
+        return $this;
+    }
+
+    public function getCurrency(): ?string
+    {
+        return $this->currency;
+    }
+
+    public function setCurrency(string $currency): static
+    {
+        $this->currency = $currency;
 
         return $this;
     }

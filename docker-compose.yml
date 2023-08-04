@@ -18,11 +18,3 @@ services:
         command: redis-server --requirepass autoparts_redis_password
         ports:
             - "6379:6379"
-
-#    database:
-#        image: mcr.microsoft.com/mssql/server:2017-latest
-#        ports:
-#            - "1433:1433"
-#        environment:
-#            - SA_PASSWORD=autoparts_database_password
-#            - ACCEPT_EULA=Y

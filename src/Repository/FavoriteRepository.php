@@ -55,6 +55,18 @@ class FavoriteRepository extends ServiceEntityRepository
             ->getOneOrNullResult();
     }
 
+    public function removeByUserIdAndAutopartId(string $userId, string $autopartId): mixed
+    {
+        return $this->createQueryBuilder('f')
+            ->delete()
+            ->andWhere('f.user = :user')
+            ->andWhere('f.autopart = :autopart')
+            ->setParameter('user', $userId)
+            ->setParameter('autopart', $autopartId)
+            ->getQuery()
+            ->getResult();
+    }
+
 //    /**
 //     * @return Favorite[] Returns an array of Favorite objects
 //     */

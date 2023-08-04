@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\FavoriteRepository;
+use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -27,9 +28,13 @@ class Favorite
     #[Groups(['show'])]
     private ?Autopart $autopart = null;
 
+    #[ORM\Column]
+    private ?DateTimeImmutable $createdAt = null;
+
     public function __construct()
     {
         $this->favoriteId = uuid_create();
+        $this->setCreatedAt(new DateTimeImmutable());
     }
 
     public function getFavoriteId(): ?string
@@ -64,5 +69,17 @@ class Favorite
     public function __toString(): string
     {
         return sprintf('%s - %s', $this->getUser(), $this->getAutopart());
+    }
+
+    public function getCreatedAt(): ?DateTimeImmutable
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(DateTimeImmutable $createdAt): static
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
     }
 }
