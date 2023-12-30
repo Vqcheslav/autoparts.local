@@ -110,7 +110,7 @@ class AppFixtures extends Fixture
                     'name' => 'Admin 5',
                     'email' => 'some_email5@email.com',
                     'password' => 'password',
-                    'roles' => ['USER_ADMIN'],
+                    'roles' => ['ROLE_MODERATOR'],
                 ],
             ],
             'car' => [
