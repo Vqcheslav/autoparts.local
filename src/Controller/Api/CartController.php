@@ -2,15 +2,13 @@
 
 namespace App\Controller\Api;
 
-use App\Model\CartDTO;
-use App\Model\ResponseDTO;
+use App\Model\CartDto;
+use App\Model\ResponseDto;
 use App\Service\AutopartService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Serializer\Context\Normalizer\ObjectNormalizerContextBuilder;
-use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 class CartController extends AbstractController
 {
@@ -21,10 +19,10 @@ class CartController extends AbstractController
 
     #[Route('/api/autoparts/carts', name: 'api.carts.toggle', methods: ['POST'])]
     public function toggle(
-        #[MapRequestPayload(acceptFormat: 'json')] CartDTO $cartDTO
+        #[MapRequestPayload(acceptFormat: 'json')] CartDto $cartDto
     ): JsonResponse
     {
-        $added = $this->autopartService->toggleCart($cartDTO);
+        $added = $this->autopartService->toggleCart($cartDto);
         $detail = 'Товар удален из корзины';
 
         if ($added) {
@@ -32,7 +30,7 @@ class CartController extends AbstractController
         }
 
         $status = 200;
-        $data = new ResponseDTO(true, $status, $detail, ['added' => $added]);
+        $data = new ResponseDto(true, $status, $detail, ['added' => $added]);
 
         return $this->json($data, $status);
     }

@@ -4,26 +4,34 @@
 
 {% block content %}
     <div class="container min-vh-100 py-3">
+        <div class="p-3">
+            <img class="img-fluid rounded" src="{{ autopart.imagePath }}" alt="{{ autopart }}">
+        </div>
         <h1 class="mb-4">
             {{ autopart.title }}
         </h1>
-        <div class="d-grid gap-1 mb-3">
-            <p class="small m-0">
-                Добавлено: {{ autopart.createdAt|format_datetime('short', 'short', locale='ru') }}
-            </p>
-            <p class="small m-0">
-                Обновлено: {{ autopart.updatedAt|format_datetime('short', 'short', locale='ru') }}
+        <div class="d-flex gap-1 mb-3 justify-content-between">
+            <div>
+                <p class="small m-0">
+                    Добавлено: {{ autopart.createdAt|format_datetime('short', 'short', locale='ru') }}
+                </p>
+                <p class="small m-0">
+                    Обновлено: {{ autopart.updatedAt|format_datetime('short', 'short', locale='ru') }}
+                </p>
+            </div>
+            <p class="text-end">
+                <b>Цена:</b> {{ autopart.price }} {{ autopart.currency }}
             </p>
         </div>
         <div class="d-grid gap-3">
             <p class="m-0">
-                Для {{ autopart.car }}
+                <b>Для {{ autopart.car }}</b>
             </p>
             <p class="m-0">
-                Склад: {{ autopart.warehouse }}
+                <b>Склад:</b> {{ autopart.warehouse }}
             </p>
             <p class="m-0">
-                {{ autopart.description }}
+                <b>Описание:</b> {{ autopart.description }}
             </p>
         </div>
     </div>

@@ -1,9 +1,9 @@
 <div class="card autopart autopart-in-cart" data-autopart-id="{{ autopart.autopartId }}">
     <div class="row g-0 align-items-center">
-        <a class="col-sm-4 text-decoration-none" href="{{ path('autopart', {autopartId: autopart.autopartId}) }}">
+        <a class="col-sm-4 text-decoration-none p-2" href="{{ path('autopart', {autopartId: autopart.autopartId}) }}">
             <img
-                class="img-fluid rounded-start ms-3"
-                src="{{ asset('img/components/gearshift.svg') }}"
+                class="img-fluid rounded"
+                src="{{ asset(autopart.imagePath) }}"
                 alt="{{ autopart.title }}"
             >
         </a>
@@ -15,6 +15,9 @@
                     </h5>
                     <p class="card-text">
                         Для {{ autopart.car }}
+                    </p>
+                    <p class="card-text">
+                        Цена: {{ autopart.price }} {{ autopart.currency }}
                     </p>
                 </a>
                 <div class="row g-3 justify-content-between align-items-center mt-3">

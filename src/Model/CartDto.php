@@ -4,7 +4,7 @@ namespace App\Model;
 
 use Symfony\Component\Validator\Constraints as Assert;
 
-class FavoriteDTO
+class CartDto
 {
     public function __construct(
         #[Assert\Length(min: 36, max: 36)]

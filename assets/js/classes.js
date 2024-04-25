@@ -149,7 +149,7 @@ export class Server
     }
 
     static async postData(
-        uri = '',
+        uriOrUrl = '',
         data = {},
         headers = {},
         withErrorHandling = true
@@ -158,7 +158,7 @@ export class Server
             headers = Server.getContentAcceptHeaders();
         }
 
-        let url = window.location.origin + uri;
+        let url = uriOrUrl.includes(window.location.origin) ? uriOrUrl : window.location.origin + uriOrUrl;
         let parameters = {
             method: 'POST',
             headers: headers,

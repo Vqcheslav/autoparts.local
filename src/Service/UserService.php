@@ -3,26 +3,25 @@
 namespace App\Service;
 
 use App\Entity\User;
-use App\Model\UserDTO;
+use App\Model\UserDto;
 use App\Repository\UserRepository;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
-class UserService
+readonly class UserService extends AbstractService
 {
     public function __construct(
-        private readonly UserRepository $userRepository,
+        private UserRepository $userRepository,
         public UserPasswordHasherInterface $userPasswordHasher
     ) {
     }
 
-    public function create(UserDTO $userDTO)
+    public function create(UserDto $userDTO): User
     {
         $user = new User();
         $user->setName($userDTO->name);
         $user->setEmail($userDTO->email);
-        $user->setPassword(
-            $this->userPasswordHasher->hashPassword($user, $userDTO->password)
-        );
+        $hashedPassword = $this->userPasswordHasher->hashPassword($user, $userDTO->password);
+        $user->setPassword($hashedPassword);
 
         $this->userRepository->save($user, true);
 

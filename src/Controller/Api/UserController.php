@@ -2,8 +2,8 @@
 
 namespace App\Controller\Api;
 
-use App\Model\ResponseDTO;
-use App\Model\UserDTO;
+use App\Model\ResponseDto;
+use App\Model\UserDto;
 use App\Service\UserService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -21,16 +21,16 @@ class UserController extends AbstractController
 
     #[Route('/api/user/register', name: 'api.user.register', methods: ['POST'])]
     public function register(
-        #[MapRequestPayload(acceptFormat: 'form')] UserDTO $userDTO,
+        #[MapRequestPayload(acceptFormat: 'form')] UserDto $userDto,
         NormalizerInterface $normalizer
     ): Response {
-        $user = $this->userService->create($userDTO);
+        $user = $this->userService->create($userDto);
         $context = (new ObjectNormalizerContextBuilder())
             ->withGroups('show')
             ->toArray();
         $normalized = $normalizer->normalize($user, null, $context);
         $status = 201;
-        $data = new ResponseDTO(
+        $data = new ResponseDto(
             true,
             $status,
             'Вы успешно зарегистрировались. Пожалуйста, войдите через форму входа',

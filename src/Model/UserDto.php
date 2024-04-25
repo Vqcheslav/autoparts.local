@@ -2,11 +2,9 @@
 
 namespace App\Model;
 
-use App\Entity\User;
 use Symfony\Component\Validator\Constraints as Assert;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
-class UserDTO
+class UserDto
 {
     public function __construct(
         #[Assert\Length(min: 5, max: 100)]

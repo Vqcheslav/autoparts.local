@@ -3,25 +3,31 @@
 namespace App\Service;
 
 use App\Entity\Autopart;
+use App\Entity\Car;
 use App\Entity\Cart;
 use App\Entity\Favorite;
+use App\Entity\Manufacturer;
 use App\Entity\User;
-use App\Model\CartDTO;
-use App\Model\FavoriteDTO;
+use App\Entity\Warehouse;
+use App\Model\Autopart\CreateAutopartDto;
+use App\Model\CartDto;
+use App\Model\FavoriteDto;
+use App\Model\ResultDto;
 use App\Repository\AutopartRepository;
 use App\Repository\CartRepository;
 use App\Repository\FavoriteRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\NonUniqueResultException;
 use Exception;
 
-class AutopartService
+readonly class AutopartService extends AbstractService
 {
     public function __construct(
-        private readonly AutopartRepository $autopartRepository,
-        private readonly FavoriteRepository $favoriteRepository,
-        private readonly CartRepository $cartRepository,
-        private readonly EntityManagerInterface $em
+        private AutopartRepository $autopartRepository,
+        private FavoriteRepository $favoriteRepository,
+        private CartRepository $cartRepository,
+        private EntityManagerInterface $entityManager,
     ) {
     }
 
@@ -35,23 +41,49 @@ class AutopartService
         return $this->autopartRepository->findAll();
     }
 
-    /**
-     * @throws NonUniqueResultException
-     */
     public function getAutopartById(string $autopartId): ?Autopart
     {
         return $this->autopartRepository->getAutopartById($autopartId);
     }
 
+    public function createAutopart(CreateAutopartDto $dto, bool $flush = true): ResultDto
+    {
+        try {
+            $autopart = new Autopart();
+            $autopart->setCar(
+                $this->entityManager->getReference(Car::class, $dto->carId)
+            );
+            $autopart->setWarehouse(
+                $this->entityManager->getReference(Warehouse::class, $dto->warehouseId)
+            );
+            $autopart->setManufacturer(
+                $this->entityManager->getReference(Manufacturer::class, $dto->manufacturerId)
+            );
+            $autopart->setTitle($dto->title);
+            $autopart->setDescription($dto->description);
+            $autopart->setImagePath($dto->imagePath);
+            $autopart->setPrice($dto->price);
+            $autopart->setCurrency($dto->currency);
+            list($hour, $minute) = explode(':', (new \DateTimeImmutable())->format('H:i'));
+            $autopart->setCreatedAt((new \DateTimeImmutable())->setTime($hour, $minute));
+            $this->autopartRepository->save($autopart, $flush);
+        } catch (ORMException $e) {
+            return $this->makeResultDto(ok: false, data: $e, detail: $e->getMessage());
+        }
+
+        return $this->makeResultDto(ok: true, data: $autopart, detail: 'Saved');
+    }
+
     /**
      * @throws NonUniqueResultException
      */
-    public function toggleFavorite(FavoriteDTO $favoriteDTO): bool
+    public function toggleFavorite(FavoriteDto $favoriteDto): bool
     {
-        $favorite = $this->favoriteRepository->getByUserIdAndAutopartId($favoriteDTO->userId, $favoriteDTO->autopartId);
+        $favorite = $this->favoriteRepository
+            ->getByUserIdAndAutopartId($favoriteDto->userId, $favoriteDto->autopartId);
 
         if ($favorite === null) {
-            $this->createFavorite($favoriteDTO);
+            $this->createFavorite($favoriteDto);
 
             return true;
         }
@@ -61,15 +93,15 @@ class AutopartService
         return false;
     }
 
-    public function createFavorite(FavoriteDTO $favoriteDTO): ?Favorite
+    public function createFavorite(FavoriteDto $favoriteDto): ?Favorite
     {
         try {
             $favorite = new Favorite();
             $favorite->setUser(
-                $this->getEntityManager()->getReference(User::class, $favoriteDTO->userId)
+                $this->entityManager->getReference(User::class, $favoriteDto->userId)
             );
             $favorite->setAutopart(
-                $this->getEntityManager()->getReference(Autopart::class, $favoriteDTO->autopartId)
+                $this->entityManager->getReference(Autopart::class, $favoriteDto->autopartId)
             );
             $this->favoriteRepository->save($favorite, true);
         } catch (Exception) {
@@ -81,23 +113,15 @@ class AutopartService
 
     public function removeFavorite(Favorite $favorite): void
     {
-//        $this->favoriteRepository->removeByUserIdAndAutopartId(
-//            $favoriteDTO->userId,
-//            $favoriteDTO->autopartId
-//        );
-
         $this->favoriteRepository->remove($favorite, true);
     }
 
-    /**
-     * @throws NonUniqueResultException
-     */
-    public function toggleCart(CartDTO $cartDTO): bool
+    public function toggleCart(CartDto $cartDto): bool
     {
-        $cart = $this->cartRepository->getByUserIdAndAutopartId($cartDTO->userId, $cartDTO->autopartId);
+        $cart = $this->cartRepository->getByUserIdAndAutopartId($cartDto->userId, $cartDto->autopartId);
 
         if ($cart === null) {
-            $this->createCart($cartDTO);
+            $this->createCart($cartDto);
 
             return true;
         }
@@ -107,15 +131,15 @@ class AutopartService
         return false;
     }
 
-    public function createCart(CartDTO $cartDTO): ?Cart
+    public function createCart(CartDto $cartDto): ?Cart
     {
         try {
             $cart = new Cart();
             $cart->setUser(
-                $this->getEntityManager()->getReference(User::class, $cartDTO->userId)
+                $this->entityManager->getReference(User::class, $cartDto->userId)
             );
             $cart->setAutopart(
-                $this->getEntityManager()->getReference(Autopart::class, $cartDTO->autopartId)
+                $this->entityManager->getReference(Autopart::class, $cartDto->autopartId)
             );
             $this->cartRepository->save($cart, true);
         } catch (Exception) {
@@ -127,11 +151,6 @@ class AutopartService
 
     public function removeCart(Cart $cart): void
     {
-//        $this->cartRepository->removeByUserIdAndAutopartId(
-//            $cartDTO->userId,
-//            $cartDTO->autopartId
-//        );
-
         $this->cartRepository->remove($cart, true);
     }
 
@@ -145,8 +164,26 @@ class AutopartService
         return $this->autopartRepository->getInCartByUser($user);
     }
 
-    private function getEntityManager(): EntityManagerInterface
+    public function processDataFromParser(array $data): ResultDto
     {
-        return $this->em;
+        foreach ($data as $createAutopartDto) {
+            $resultDto = $this->createAutopart($createAutopartDto);
+
+            if ($resultDto->hasErrors()) {
+                return $resultDto;
+            }
+        }
+
+        return $this->makeResultDto(ok: true, data: $data, detail: 'Success');
+    }
+
+    public function getAutopartsWhereImagePathLike(string $imagePath)
+    {
+        return $this->autopartRepository->getAutopartsWhereImagePathLike($imagePath);
+    }
+
+    public function getLaunchesWhereImagePathLike(string $imagePath)
+    {
+        return $this->autopartRepository->getLaunchesWhereImagePathLike($imagePath);
     }
 }

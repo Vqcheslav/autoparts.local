@@ -2,7 +2,7 @@
 
 namespace App\Controller\Api;
 
-use App\Model\ResponseDTO;
+use App\Model\ResponseDto;
 use App\Service\AutopartService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -27,7 +27,7 @@ class AutopartController extends AbstractController
             ->toArray();
         $normalized = $this->normalizer->normalize($autoparts, null, $context);
         $status = 200;
-        $data = new ResponseDTO(true, $status, 'Autoparts', $normalized);
+        $data = new ResponseDto(true, $status, 'Autoparts', $normalized);
 
         return $this->json($data, $status);
     }

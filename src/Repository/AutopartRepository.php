@@ -5,7 +5,6 @@ namespace App\Repository;
 use App\Entity\Autopart;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -57,9 +56,6 @@ class AutopartRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    /**
-     * @throws NonUniqueResultException
-     */
     public function getAutopartById(string $autopartId): ?Autopart
     {
         return $this->createQueryBuilder('a')
@@ -94,13 +90,29 @@ class AutopartRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-//    public function findOneBySomeField($value): ?Autopart
-//    {
-//        return $this->createQueryBuilder('a')
-//            ->andWhere('a.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+    public function getAutopartsWhereImagePathLike(string $imagePath)
+    {
+        return $this->createQueryBuilder('a')
+            ->select('a', 'c', 'w')
+            ->join('a.car', 'c')
+            ->join('a.warehouse', 'w')
+            ->andWhere("a.imagePath LIKE :imagePath")
+            ->setParameter('imagePath', '%' . $imagePath . '%')
+            ->orderBy('a.createdAt', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function getLaunchesWhereImagePathLike(string $imagePath)
+    {
+        $qb = $this->createQueryBuilder('a');
+        return $qb
+            ->select('DISTINCT(a.createdAt) as createdAt', 'COUNT(a.imagePath) as rows')
+            ->andWhere("a.imagePath LIKE :imagePath")
+            ->setParameter('imagePath', '%' . $imagePath . '%')
+            ->groupBy('a.createdAt')
+            ->orderBy('a.createdAt', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
 }

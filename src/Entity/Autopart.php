@@ -12,6 +12,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ORM\Entity(repositoryClass: AutopartRepository::class)]
 class Autopart
 {
+    public const DEFAULT_IMAGE_PATH = '/img/components/gearshift.svg';
+
     #[ORM\Id]
     #[ORM\Column(type: 'guid', unique: true)]
     #[Groups(['show'])]
@@ -70,6 +72,7 @@ class Autopart
     {
         $this->autopartId = uuid_create();
         $this->setCreatedAt(new DateTimeImmutable());
+        $this->setImagePath(self::DEFAULT_IMAGE_PATH);
         $this->setUpdatedAtNow();
         $this->orders = new ArrayCollection();
         $this->favorites = new ArrayCollection();

@@ -4,7 +4,7 @@ namespace App\Model;
 
 use Symfony\Component\Validator\Constraints as Assert;
 
-class ResponseDTO
+class ResponseDto
 {
     public function __construct(
         public bool $ok,

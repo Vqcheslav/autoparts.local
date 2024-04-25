@@ -2,15 +2,13 @@
 
 namespace App\Controller\Api;
 
-use App\Model\FavoriteDTO;
-use App\Model\ResponseDTO;
+use App\Model\FavoriteDto;
+use App\Model\ResponseDto;
 use App\Service\AutopartService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Serializer\Context\Normalizer\ObjectNormalizerContextBuilder;
-use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 class FavoriteController extends AbstractController
 {
@@ -21,10 +19,10 @@ class FavoriteController extends AbstractController
 
     #[Route('/api/autoparts/favorites', name: 'api.favorites.toggle', methods: ['POST'])]
     public function toggle(
-        #[MapRequestPayload(acceptFormat: 'json')] FavoriteDTO $favoriteDTO
+        #[MapRequestPayload(acceptFormat: 'json')] FavoriteDto $favoriteDto
     ): JsonResponse
     {
-        $flag = $this->autopartService->toggleFavorite($favoriteDTO);
+        $flag = $this->autopartService->toggleFavorite($favoriteDto);
         $detail = 'Товар удален из избранного';
 
         if ($flag) {
@@ -32,7 +30,7 @@ class FavoriteController extends AbstractController
         }
 
         $status = 200;
-        $data = new ResponseDTO(true, $status, $detail, ['added' => $flag]);
+        $data = new ResponseDto(true, $status, $detail, ['added' => $flag]);
 
         return $this->json($data, $status);
     }

@@ -3,7 +3,7 @@ start:
 	sudo service nginx start
 	sudo service docker start
 	sudo service php8.2-fpm start
-	docker compose up $(arg)
+	docker compose up -d
 	yarn watch
 stop:
 	docker compose stop
