@@ -3,6 +3,8 @@
 namespace App\Controller;
 
 use App\Model\ParserDto;
+use App\Repository\ManufacturerRepository;
+use App\Repository\WarehouseRepository;
 use App\Service\AutopartService;
 use App\Service\CarService;
 use App\Service\ParserService;
@@ -18,8 +20,9 @@ class ParserController extends AbstractController
         private readonly ParserService $parserService,
         private readonly AutopartService $autopartService,
         private readonly CarService $carService,
-    ) {
-    }
+        private readonly WarehouseRepository $warehouseRepository,
+        private readonly ManufacturerRepository $manufacturerRepository,
+    ) {}
 
     #[Route('/parser', name: 'app_parser_index')]
     public function index(): Response
@@ -27,21 +30,24 @@ class ParserController extends AbstractController
         $url = explode('?', ParserService::URL_FORMAT)[0];
         $autoparts = $this->autopartService->getAutopartsWhereImagePathLike(ParserService::MAIN_SITE);
         $cars = $this->carService->findAll();
+        $warehouses = $this->warehouseRepository->findAll();
+        $manufacturers = $this->manufacturerRepository->findAll();
         $launches = $this->autopartService->getLaunchesWhereImagePathLike(ParserService::MAIN_SITE);
 
         return $this->render('parser.html.twig', [
-            'url'       => $url,
-            'autoparts' => $autoparts,
-            'cars'      => $cars,
-            'launches'  => $launches,
+            'url'           => $url,
+            'autoparts'     => $autoparts,
+            'cars'          => $cars,
+            'warehouses'    => $warehouses,
+            'manufacturers' => $manufacturers,
+            'launches'      => $launches,
         ]);
     }
 
     #[Route('/parser/parse', name: 'app_parser_parse', methods: ['POST'])]
     public function parse(
-        #[MapRequestPayload(acceptFormat: 'json')] ParserDto $parserDto
-    ): JsonResponse
-    {
+        #[MapRequestPayload(acceptFormat: 'form')] ParserDto $parserDto,
+    ): JsonResponse {
         $resultDto = $this->parserService->parse($parserDto);
 
         if ($resultDto->isOk()) {
@@ -58,11 +64,15 @@ class ParserController extends AbstractController
     #[Route('/parser/test', name: 'app_parser_test', methods: ['POST'])]
     public function test(): JsonResponse
     {
-        $resultDto = $this->parserService->parse(new ParserDto(
-            url: ParserService::DEFAULT_URL,
-            page: ParserService::DEFAULT_PAGE,
-            carId: ParserService::DEFAULT_CAR_ID
-        ));
+        $resultDto = $this->parserService->parse(
+            new ParserDto(
+                url: ParserService::DEFAULT_URL,
+                page: ParserService::DEFAULT_PAGE,
+                carId: ParserService::DEFAULT_CAR_ID,
+                warehouseId: ParserService::DEFAULT_WAREHOUSE_ID,
+                manufacturerId: ParserService::DEFAULT_MANUFACTURER_ID,
+            ),
+        );
 
         if ($resultDto->hasErrors() || count($resultDto->getData()) !== ParserService::ROWS_PER_PAGE_BY_DEFAULT) {
             return $this->json($resultDto->setOk(false)->setDetail('Tests failed'));

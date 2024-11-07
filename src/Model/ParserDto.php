@@ -15,6 +15,12 @@ class ParserDto
 
         #[Assert\Length(min: 36, max: 36)]
         public string $carId,
+
+        #[Assert\Length(min: 36, max: 36)]
+        public string $warehouseId,
+
+        #[Assert\Length(min: 36, max: 36)]
+        public string $manufacturerId,
     ) {
     }
 }

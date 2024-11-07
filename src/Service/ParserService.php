@@ -41,7 +41,7 @@ readonly class ParserService extends AbstractService
     public function parse(ParserDto $parserDto): ResultDto
     {
         $html = $this->getContentByPage($parserDto->url, $parserDto->page);
-        $data = $this->getDataFromHtml($html, $parserDto->carId);
+        $data = $this->getDataFromHtml($html, $parserDto->carId, $parserDto->warehouseId, $parserDto->manufacturerId);
         $ok = ! empty($data);
 
         return $this->makeResultDto(ok: $ok, data: $data);
@@ -65,7 +65,7 @@ readonly class ParserService extends AbstractService
         return $content;
     }
 
-    private function getDataFromHtml(string $html, string $carId): ?array
+    private function getDataFromHtml(string $html, string $carId, string $warehouseId, string $manufacturerId): ?array
     {
         $result = [];
 
@@ -80,8 +80,8 @@ readonly class ParserService extends AbstractService
 
             $result[] = new CreateAutopartDto(
                 carId: $carId,
-                warehouseId: self::DEFAULT_WAREHOUSE_ID,
-                manufacturerId: self::DEFAULT_MANUFACTURER_ID,
+                warehouseId: $warehouseId,
+                manufacturerId: $manufacturerId,
                 title: $item->filter('h5.add-title a b')->text(),
                 description: $description . '. Подробнее по ссылке ' . self::MAIN_SITE . $uri,
                 imagePath: self::MAIN_SITE . $imagePath,

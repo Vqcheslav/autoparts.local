@@ -24,9 +24,25 @@
             </div>
             <div class="my-3">
                 <label for="parser-car">Автомобиль:</label>
-                <select id="parser-car" class="form-select" name="car_id" required>
+                <select id="parser-car" class="form-select" name="carId" required>
                     {% for car in cars %}
                         <option value="{{ car.carId }}">{{ car }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="my-3">
+                <label for="parser-warehouse">Склад:</label>
+                <select id="parser-warehouse" class="form-select" name="warehouseId" required>
+                    {% for warehouse in warehouses %}
+                        <option value="{{ warehouse.warehouseId }}">{{ warehouse }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="my-3">
+                <label for="parser-manufacturer">Производитель:</label>
+                <select id="parser-manufacturer" class="form-select" name="manufacturerId" required>
+                    {% for manufacturer in manufacturers %}
+                        <option value="{{ manufacturer.manufacturerId }}">{{ manufacturer }}</option>
                     {% endfor %}
                 </select>
             </div>
@@ -97,12 +113,8 @@
             let formData = new FormData(this);
             let parameters = {
                 method: 'POST',
-                headers: {'Content-Type': 'application/json', 'Accept': 'application/json'},
-                body: JSON.stringify({
-                    'url': formData.get('url'),
-                    'page': Number(formData.get('page')),
-                    'carId': formData.get('car_id')
-                }),
+                headers: {'Accept': 'application/json'},
+                body: formData,
                 credentials: 'include',
             };
             let response = await fetch(this.action, parameters);

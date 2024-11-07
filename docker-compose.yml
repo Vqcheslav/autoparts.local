@@ -1,12 +1,37 @@
-version: '3.8'
-
 services:
+    nginx:
+        image: nginx:latest
+        ports:
+            - "80:80"
+        volumes:
+            - "./_docker/nginx/local.conf:/etc/nginx/conf.d/local.conf"
+            - "./_docker/nginx/logs/:/var/log/nginx/"
+            - "./:/var/www/autoparts.local/"
+        links:
+            - php-fpm
 
-    database:
+    php-fpm:
+        build: ./_docker/php-fpm
+        volumes:
+            - "./_docker/php-fpm/local.ini:/usr/local/etc/php/conf.d/40-local.ini"
+            - "./_docker/php-fpm/fpm.conf:/usr/local/etc/php-fpm.d/www.conf"
+            - "./_docker/php-fpm/logs/:/var/log/"
+            - "./:/var/www/autoparts.local/"
+        links:
+            - mysql
+            - redis
+
+    mysql:
         image: mysql:8
+        hostname: autoparts.local
         ports:
             - "3306:3306"
+        volumes:
+            - "./_docker/mysql/logs/:/var/log/mysql/"
+            - "./_docker/mysql/data/:/var/lib/mysql/"
+            - "./_docker/mysql/setup.sql:/docker-entrypoint-initdb.d/1.sql"
         environment:
+            MYSQL_ALLOW_EMPTY_PASSWORD: false
             MYSQL_ROOT_USER: root
             MYSQL_ROOT_PASSWORD: autoparts_Root_Pass
             MYSQL_DATABASE: autoparts
@@ -14,7 +39,10 @@ services:
             MYSQL_PASSWORD: autoparts_Pass
 
     redis:
-        image: redis:5-alpine
-        command: redis-server --requirepass autoparts_redis_password
+        image: redis:7-alpine
+        hostname: autoparts.local
         ports:
             - "6379:6379"
+        volumes:
+            - "./_docker/redis/logs/:/var/log/"
+            - "./_docker/redis/data/:/data/"
