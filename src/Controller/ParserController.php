@@ -62,17 +62,11 @@ class ParserController extends AbstractController
     }
 
     #[Route('/parser/test', name: 'app_parser_test', methods: ['POST'])]
-    public function test(): JsonResponse
+    public function test(
+        #[MapRequestPayload(acceptFormat: 'form')] ParserDto $parserDto,
+    ): JsonResponse
     {
-        $resultDto = $this->parserService->parse(
-            new ParserDto(
-                url: ParserService::DEFAULT_URL,
-                page: ParserService::DEFAULT_PAGE,
-                carId: ParserService::DEFAULT_CAR_ID,
-                warehouseId: ParserService::DEFAULT_WAREHOUSE_ID,
-                manufacturerId: ParserService::DEFAULT_MANUFACTURER_ID,
-            ),
-        );
+        $resultDto = $this->parserService->parse($parserDto);
 
         if ($resultDto->hasErrors() || count($resultDto->getData()) !== ParserService::ROWS_PER_PAGE_BY_DEFAULT) {
             return $this->json($resultDto->setOk(false)->setDetail('Tests failed'));

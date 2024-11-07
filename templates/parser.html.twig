@@ -110,14 +110,12 @@
                 e.preventDefault();
             }
 
-            let formData = new FormData(this);
-            let parameters = {
+            let response = await fetch(this.action, {
                 method: 'POST',
                 headers: {'Accept': 'application/json'},
-                body: formData,
+                body: new FormData(this),
                 credentials: 'include',
-            };
-            let response = await fetch(this.action, parameters);
+            });
             let parsedResponse = await response.json();
             let title = parsedResponse.ok ? 'Successfully done' : 'Error occurred';
 
@@ -127,13 +125,12 @@
         document.querySelector('#parser-test-form').addEventListener('submit', async function (e) {
             e.preventDefault();
 
-            let parameters = {
+            let response = await fetch(this.action, {
                 method: 'POST',
-                headers: {'Content-Type': 'application/json', 'Accept': 'application/json'},
-                body: '{}',
+                headers: {'Accept': 'application/json'},
+                body: new FormData(document.querySelector('#parser-form')),
                 credentials: 'include',
-            };
-            let response = await fetch(this.action, parameters);
+            });
             let parsedResponse = await response.json();
             let title = parsedResponse.ok ? 'Successfully done' : 'Error occurred';
 

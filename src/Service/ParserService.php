@@ -24,11 +24,11 @@ readonly class ParserService extends AbstractService
 
     public const DEFAULT_URL = 'https://bamper.by/zchbu/marka_opel/model_astra/god_2001-2001/toplivo_dizel/enginevalue_1.7/';
 
-    public const DEFAULT_WAREHOUSE_ID = '0936f1e3-90f6-4a12-99e9-85ff0d97a181';
+    public const DEFAULT_WAREHOUSE_ID = '9301fd35-2786-45c2-8cd2-7f0370fadf81';
 
-    public const DEFAULT_MANUFACTURER_ID = '4f64b287-ff0d-4ae3-9c47-214bf863f249';
+    public const DEFAULT_MANUFACTURER_ID = '416dd588-17b3-40d3-b4a5-64cd30d1fae6';
 
-    public const DEFAULT_CAR_ID = 'aa420eb6-b3a3-4685-b241-ead427000dd3';
+    public const DEFAULT_CAR_ID = '57dc4aca-ed2b-46cd-aab1-9972899caa6e';
 
     public const DEFAULT_PAGE = 1;
 
